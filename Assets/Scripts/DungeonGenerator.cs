@@ -19,6 +19,8 @@ public class DungeonGenerator : MonoBehaviour
     public GameObject floorPrefab;
     public GameObject wallPrefab;
     public GameObject playerPrefab;
+    public GameObject stairPrefab;
+
 
     public CameraFollow cameraFollow;
 
@@ -151,6 +153,8 @@ public class DungeonGenerator : MonoBehaviour
                 GameObject tilePrefab = (map[x, y] == TileType.Floor) ? floorPrefab : wallPrefab;
                 Instantiate(tilePrefab, new Vector3(x, y, 0), Quaternion.identity);
             }
+
+
     }
 
     Vector2Int GetSafeSpawnPosition()
@@ -172,6 +176,29 @@ public class DungeonGenerator : MonoBehaviour
         Debug.LogWarning("No se encontró celda tipo piso, spawn fallback");
         return new Vector2Int(1, 1); // Coordenada de emergencia para evitar (0,0)
     }
+
+    void PlaceStairs()
+    {
+        List<Vector2Int> floorPositions = new List<Vector2Int>();
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (map[x, y] == TileType.Floor)
+                {
+                    floorPositions.Add(new Vector2Int(x, y));
+                }
+            }
+        }
+
+        if (floorPositions.Count > 0)
+        {
+            Vector2Int pos = floorPositions[Random.Range(0, floorPositions.Count)];
+            Instantiate(stairPrefab, new Vector3(pos.x, pos.y, 0), Quaternion.identity);
+        }
+    }
+
 
 
 
