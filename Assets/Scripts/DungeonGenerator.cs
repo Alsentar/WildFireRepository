@@ -18,6 +18,11 @@ public class DungeonGenerator : MonoBehaviour
 
     public GameObject floorPrefab;
     public GameObject wallPrefab;
+    public GameObject playerPrefab;
+
+    public CameraFollow cameraFollow;
+
+
 
     private TileType[,] map;
 
@@ -27,6 +32,30 @@ public class DungeonGenerator : MonoBehaviour
     {
         GenerateMap();
         RenderMap();
+
+        // Colocar al jugador en el centro de la primera habitación
+        if (rooms.Count > 0)
+        {
+            Vector2Int startPos = GetSafeSpawnPosition();
+            Debug.Log("Instanciando jugador en posición: " + startPos);
+            GameObject player = Instantiate(playerPrefab, new Vector3(startPos.x, startPos.y, 0), Quaternion.identity);
+            Debug.Log("Jugador instanciado en: " + player.transform.position);
+
+            // Asignar la cámara al jugador instanciado
+            if (cameraFollow != null)
+            {
+                cameraFollow.target = player.transform;
+            }
+            else
+            {
+                Debug.LogWarning(" cameraFollow no está asignado en el inspector.");
+            }
+
+
+        }
+
+
+
     }
 
     void GenerateMap()
@@ -71,6 +100,9 @@ public class DungeonGenerator : MonoBehaviour
                 }
             }
         }
+
+        
+
     }
 
     void CreateRoom(Rect room)
@@ -120,4 +152,27 @@ public class DungeonGenerator : MonoBehaviour
                 Instantiate(tilePrefab, new Vector3(x, y, 0), Quaternion.identity);
             }
     }
+
+    Vector2Int GetSafeSpawnPosition()
+    {
+        Rect room = rooms[0];
+
+        for (int x = Mathf.FloorToInt(room.xMin) + 1; x < Mathf.FloorToInt(room.xMax) - 1; x++)
+        {
+            for (int y = Mathf.FloorToInt(room.yMin) + 1; y < Mathf.FloorToInt(room.yMax) - 1; y++)
+            {
+                if (map[x, y] == TileType.Floor)
+                {
+                    Debug.Log("Spawn válido encontrado en: " + x + ", " + y);
+                    return new Vector2Int(x, y);
+                }
+            }
+        }
+
+        Debug.LogWarning("No se encontró celda tipo piso, spawn fallback");
+        return new Vector2Int(1, 1); // Coordenada de emergencia para evitar (0,0)
+    }
+
+
+
 }
