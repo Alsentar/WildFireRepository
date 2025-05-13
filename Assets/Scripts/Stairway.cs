@@ -2,17 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Starway : MonoBehaviour
+public class Stairway : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        
-    }
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log("Jugador tocó escalera , Generando nuevo nivel");
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+            DungeonGenerator generator = FindObjectOfType<DungeonGenerator>();
+            if (generator != null)
+            {
+                generator.GenerateNewLevel();
+            }
+        }
     }
 }

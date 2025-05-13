@@ -159,7 +159,7 @@ MonoBehaviour:
   floorPrefab: {fileID: 4165485690647698683, guid: f84ab57ec2dbc1843adf51b43a8f9203, type: 3}
   wallPrefab: {fileID: 859787848012155569, guid: ae6cd3e5797263f4d9cccad2197ac279, type: 3}
   playerPrefab: {fileID: 6621414760742700946, guid: 79e4b61745222a247a2481c166dbcfd8, type: 3}
-  stairPrefab: {fileID: 0}
+  stairPrefab: {fileID: 7675584203494680841, guid: 4ed97e24b236a934e870c629b9045de7, type: 3}
   cameraFollow: {fileID: 1753979163}
 --- !u!4 &398691723
 Transform:

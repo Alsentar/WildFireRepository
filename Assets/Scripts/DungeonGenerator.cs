@@ -34,6 +34,7 @@ public class DungeonGenerator : MonoBehaviour
     {
         GenerateMap();
         RenderMap();
+        PlaceStairs();
 
         // Colocar al jugador en el centro de la primera habitación
         if (rooms.Count > 0)
@@ -198,6 +199,36 @@ public class DungeonGenerator : MonoBehaviour
             Instantiate(stairPrefab, new Vector3(pos.x, pos.y, 0), Quaternion.identity);
         }
     }
+
+    public void GenerateNewLevel()
+    {
+        // Destruir todos los objetos del mapa (excepto la cámara y este generador)
+        foreach (GameObject obj in FindObjectsOfType<GameObject>())
+        {
+            if (obj != this.gameObject && obj.name != "Main Camera")
+            {
+                Destroy(obj);
+            }
+        }
+
+        rooms.Clear();
+        map = new TileType[width, height];
+
+        GenerateMap();
+        RenderMap();
+        PlaceStairs();
+
+        // Spawnear jugador de nuevo
+        Vector2Int startPos = GetSafeSpawnPosition();
+        GameObject player = Instantiate(playerPrefab, new Vector3(startPos.x, startPos.y, 0), Quaternion.identity);
+
+        // Reasignar cámara
+        if (cameraFollow != null)
+        {
+            cameraFollow.target = player.transform;
+        }
+    }
+
 
 
 
