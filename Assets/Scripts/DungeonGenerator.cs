@@ -19,6 +19,8 @@ public class DungeonGenerator : MonoBehaviour
     public GameObject floorPrefab;
     public GameObject wallPrefab;
     public GameObject playerPrefab;
+    public GameObject stairPrefab;
+
 
     public CameraFollow cameraFollow;
 
@@ -32,6 +34,7 @@ public class DungeonGenerator : MonoBehaviour
     {
         GenerateMap();
         RenderMap();
+        PlaceStairs();
 
         // Colocar al jugador en el centro de la primera habitación
         if (rooms.Count > 0)
@@ -151,6 +154,8 @@ public class DungeonGenerator : MonoBehaviour
                 GameObject tilePrefab = (map[x, y] == TileType.Floor) ? floorPrefab : wallPrefab;
                 Instantiate(tilePrefab, new Vector3(x, y, 0), Quaternion.identity);
             }
+
+
     }
 
     Vector2Int GetSafeSpawnPosition()
@@ -172,6 +177,59 @@ public class DungeonGenerator : MonoBehaviour
         Debug.LogWarning("No se encontró celda tipo piso, spawn fallback");
         return new Vector2Int(1, 1); // Coordenada de emergencia para evitar (0,0)
     }
+
+    void PlaceStairs()
+    {
+        List<Vector2Int> floorPositions = new List<Vector2Int>();
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (map[x, y] == TileType.Floor)
+                {
+                    floorPositions.Add(new Vector2Int(x, y));
+                }
+            }
+        }
+
+        if (floorPositions.Count > 0)
+        {
+            Vector2Int pos = floorPositions[Random.Range(0, floorPositions.Count)];
+            Instantiate(stairPrefab, new Vector3(pos.x, pos.y, 0), Quaternion.identity);
+        }
+    }
+
+    public void GenerateNewLevel()
+    {
+        // Destruir todos los objetos del mapa (excepto la cámara y este generador)
+        foreach (GameObject obj in FindObjectsOfType<GameObject>())
+        {
+            if (obj != this.gameObject && obj.name != "Main Camera")
+            {
+                Destroy(obj);
+            }
+        }
+
+        rooms.Clear();
+        map = new TileType[width, height];
+
+        GenerateMap();
+        RenderMap();
+        PlaceStairs();
+
+        // Spawnear jugador de nuevo
+        Vector2Int startPos = GetSafeSpawnPosition();
+        GameObject player = Instantiate(playerPrefab, new Vector3(startPos.x, startPos.y, 0), Quaternion.identity);
+
+        // Reasignar cámara
+        if (cameraFollow != null)
+        {
+            cameraFollow.target = player.transform;
+        }
+    }
+
+
 
 
 
