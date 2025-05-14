@@ -160,6 +160,13 @@ MonoBehaviour:
   wallPrefab: {fileID: 859787848012155569, guid: ae6cd3e5797263f4d9cccad2197ac279, type: 3}
   playerPrefab: {fileID: 6621414760742700946, guid: 79e4b61745222a247a2481c166dbcfd8, type: 3}
   stairPrefab: {fileID: 7675584203494680841, guid: 4ed97e24b236a934e870c629b9045de7, type: 3}
+  enemyPrefabs:
+  - {fileID: 2357820628460748980, guid: 8e13c5e3083a488448664782fe741e89, type: 3}
+  - {fileID: 8708047651817145343, guid: 97efc87c408b8df4ba96198731fb4c3a, type: 3}
+  - {fileID: 6407181868125054139, guid: cf364032b16b9c549a2e4b0db4b59ab4, type: 3}
+  - {fileID: 8019063419482229544, guid: 68dcf4487b6a5ee41b7e6f451519a931, type: 3}
+  - {fileID: 8701202841119714877, guid: 44795354e4ec4f14298f02e301d4941e, type: 3}
+  enemiesPerLevel: 5
   cameraFollow: {fileID: 1753979163}
 --- !u!4 &398691723
 Transform:
