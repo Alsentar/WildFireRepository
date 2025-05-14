@@ -20,6 +20,9 @@ public class DungeonGenerator : MonoBehaviour
     public GameObject wallPrefab;
     public GameObject playerPrefab;
     public GameObject stairPrefab;
+    public GameObject[] enemyPrefabs; // Lista de prefabs de enemigos
+    public int enemiesPerLevel = 5;   // Cuántos enemigos generar por nivel
+
 
 
     public CameraFollow cameraFollow;
@@ -35,6 +38,7 @@ public class DungeonGenerator : MonoBehaviour
         GenerateMap();
         RenderMap();
         PlaceStairs();
+        PlaceEnemies();
 
         // Colocar al jugador en el centro de la primera habitación
         if (rooms.Count > 0)
@@ -217,6 +221,7 @@ public class DungeonGenerator : MonoBehaviour
         GenerateMap();
         RenderMap();
         PlaceStairs();
+        PlaceEnemies();
 
         // Spawnear jugador de nuevo
         Vector2Int startPos = GetSafeSpawnPosition();
@@ -228,6 +233,41 @@ public class DungeonGenerator : MonoBehaviour
             cameraFollow.target = player.transform;
         }
     }
+
+    void PlaceEnemies()
+    {
+        List<Vector2Int> validPositions = new List<Vector2Int>();
+
+        // Recolectar todas las posiciones de tipo piso (Floor)
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (map[x, y] == TileType.Floor)
+                {
+                    validPositions.Add(new Vector2Int(x, y));
+                }
+            }
+        }
+
+        // Spawnear enemigos en posiciones aleatorias
+        for (int i = 0; i < enemiesPerLevel; i++)
+        {
+            if (validPositions.Count == 0) break;
+
+            // Elegir una posición aleatoria y eliminarla para no repetir
+            int index = Random.Range(0, validPositions.Count);
+            Vector2Int pos = validPositions[index];
+            validPositions.RemoveAt(index);
+
+            // Elegir un prefab aleatorio de la lista
+            int prefabIndex = Random.Range(0, enemyPrefabs.Length);
+            GameObject enemyToSpawn = enemyPrefabs[prefabIndex];
+
+            Instantiate(enemyToSpawn, new Vector3(pos.x, pos.y, 0), Quaternion.identity);
+        }
+    }
+
 
 
 
