@@ -244,7 +244,7 @@ public class DungeonGenerator : MonoBehaviour
     {
         List<Vector2Int> validPositions = new List<Vector2Int>();
 
-        // Recolectar todas las posiciones de tipo piso (Floor)
+        // Recolectar todas las posiciones válidas de tipo piso
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
@@ -256,23 +256,46 @@ public class DungeonGenerator : MonoBehaviour
             }
         }
 
-        // Spawnear enemigos en posiciones aleatorias
         for (int i = 0; i < enemiesPerLevel; i++)
         {
             if (validPositions.Count == 0) break;
 
-            // Elegir una posición aleatoria y eliminarla para no repetir
             int index = Random.Range(0, validPositions.Count);
             Vector2Int pos = validPositions[index];
             validPositions.RemoveAt(index);
 
-            // Elegir un prefab aleatorio de la lista
             int prefabIndex = Random.Range(0, enemyPrefabs.Length);
             GameObject enemyToSpawn = enemyPrefabs[prefabIndex];
 
-            Instantiate(enemyToSpawn, new Vector3(pos.x, pos.y, 0), Quaternion.identity);
+            // Instanciar el enemigo en la posición deseada
+            GameObject enemyInstance = Instantiate(enemyToSpawn, new Vector3(pos.x, pos.y, 0), Quaternion.identity);
+
+            // Obtener o asignar identificador único
+            EnemyIdentifier identifier = enemyInstance.GetComponent<EnemyIdentifier>();
+            if (identifier == null)
+            {
+                identifier = enemyInstance.AddComponent<EnemyIdentifier>();
+            }
+
+            if (BattleLoader.Instance != null && BattleLoader.Instance.eliminatedEnemies.Contains(identifier.enemyID))
+            {
+                Debug.Log("Evitando reaparición del enemigo eliminado: " + identifier.enemyID);
+                Destroy(enemyInstance); // Eliminarlo si fue derrotado antes
+                i--; // Reintenta con otro enemigo
+                continue;
+            }
+
+            // Agregar collider + trigger si es necesario
+            Collider2D col = enemyInstance.GetComponent<Collider2D>();
+            if (col == null) col = enemyInstance.AddComponent<BoxCollider2D>();
+            col.isTrigger = true;
+
+            // Agregar EnemyTrigger dinámicamente
+            EnemyTrigger trigger = enemyInstance.AddComponent<EnemyTrigger>();
+            trigger.enemyPrefab = enemyToSpawn;
         }
     }
+
 
     void PlaceChests()
     {

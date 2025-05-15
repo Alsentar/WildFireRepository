@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5706947051774555073}
   - component: {fileID: 6744916207727483700}
   - component: {fileID: 6848541248103757281}
+  - component: {fileID: 8252406730892853077}
   - component: {fileID: 2492670503272360990}
   m_Layer: 0
   m_Name: pixil-frame-0_11
@@ -149,6 +150,26 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8252406730892853077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6621414760742700946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c60a171f726e0a49bdf163dea33425e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitName: 
+  maxHP: 500
+  currentHP: 500
+  attack: 30
+  defense: 0
+  speed: 0
+  canAct: 0
+  combatManager: {fileID: 0}
 --- !u!61 &2492670503272360990
 BoxCollider2D:
   m_ObjectHideFlags: 0

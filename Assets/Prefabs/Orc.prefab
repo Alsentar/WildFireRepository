@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 501471066280166078}
   - component: {fileID: 6770098767606471664}
+  - component: {fileID: -29342661902604509}
+  - component: {fileID: 5540462389133374596}
   - component: {fileID: 255504739718438664}
   m_Layer: 0
   m_Name: Orc
@@ -85,6 +87,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &-29342661902604509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8701202841119714877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9de515c64fdabb84cb10cb61c3bd4d35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitName: 
+  maxHP: 200
+  currentHP: 200
+  attack: 0
+  defense: 0
+  speed: 0
+--- !u!114 &5540462389133374596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8701202841119714877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d38c108c2cda7624a90cac8eda69db21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyID: 
 --- !u!61 &255504739718438664
 BoxCollider2D:
   m_ObjectHideFlags: 0
