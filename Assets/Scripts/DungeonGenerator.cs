@@ -22,6 +22,10 @@ public class DungeonGenerator : MonoBehaviour
     public GameObject stairPrefab;
     public GameObject[] enemyPrefabs; // Lista de prefabs de enemigos
     public int enemiesPerLevel = 5;   // Cuántos enemigos generar por nivel
+    public GameObject chestPrefab;         // Prefab del cofre
+    public int minChests = 2;              // Cantidad mínima de cofres por mapa
+    public int maxChests = 3;              // Cantidad máxima de cofres por mapa
+
 
 
 
@@ -39,6 +43,7 @@ public class DungeonGenerator : MonoBehaviour
         RenderMap();
         PlaceStairs();
         PlaceEnemies();
+        PlaceChests(); 
 
         // Colocar al jugador en el centro de la primera habitación
         if (rooms.Count > 0)
@@ -222,6 +227,7 @@ public class DungeonGenerator : MonoBehaviour
         RenderMap();
         PlaceStairs();
         PlaceEnemies();
+        PlaceChests();
 
         // Spawnear jugador de nuevo
         Vector2Int startPos = GetSafeSpawnPosition();
@@ -267,6 +273,39 @@ public class DungeonGenerator : MonoBehaviour
             Instantiate(enemyToSpawn, new Vector3(pos.x, pos.y, 0), Quaternion.identity);
         }
     }
+
+    void PlaceChests()
+    {
+        List<Vector2Int> validPositions = new List<Vector2Int>();
+
+        // Recolectar todas las celdas de tipo piso
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (map[x, y] == TileType.Floor)
+                {
+                    validPositions.Add(new Vector2Int(x, y));
+                }
+            }
+        }
+
+        // Decidir aleatoriamente cuántos cofres colocar
+        int chestCount = Random.Range(minChests, maxChests + 1);
+
+        for (int i = 0; i < chestCount; i++)
+        {
+            if (validPositions.Count == 0) break;
+
+            // Elegir posición aleatoria y eliminarla para evitar repeticiones
+            int index = Random.Range(0, validPositions.Count);
+            Vector2Int pos = validPositions[index];
+            validPositions.RemoveAt(index);
+
+            Instantiate(chestPrefab, new Vector3(pos.x, pos.y, 0), Quaternion.identity);
+        }
+    }
+
 
 
 

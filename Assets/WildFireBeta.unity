@@ -167,6 +167,9 @@ MonoBehaviour:
   - {fileID: 8019063419482229544, guid: 68dcf4487b6a5ee41b7e6f451519a931, type: 3}
   - {fileID: 8701202841119714877, guid: 44795354e4ec4f14298f02e301d4941e, type: 3}
   enemiesPerLevel: 5
+  chestPrefab: {fileID: 4827779375327310918, guid: 8dada9d1b4e16754bb8af2f22cc61208, type: 3}
+  minChests: 2
+  maxChests: 3
   cameraFollow: {fileID: 1753979163}
 --- !u!4 &398691723
 Transform:
