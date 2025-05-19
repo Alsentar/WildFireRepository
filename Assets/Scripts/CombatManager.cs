@@ -28,7 +28,21 @@ public class CombatManager : MonoBehaviour
         playerUnit = playerObj.GetComponent<PlayerUnit>();
         enemyUnit = enemyObj.GetComponent<CombatUnit>();
 
+        // UI: vincular barra de vida
+        EnemyHealthUI healthUI = FindObjectOfType<EnemyHealthUI>();
+        if (healthUI != null)
+        {
+            healthUI.Initialize(enemyUnit);
+        }
+
         playerUnit.combatManager = this;
+
+        CombatUI ui = FindObjectOfType<CombatUI>();
+        if (ui != null)
+        {
+            ui.playerUnit = playerUnit;
+        }
+
 
         StartTurn();
     }

@@ -37,15 +37,26 @@ public class DungeonGenerator : MonoBehaviour
 
     private List<Rect> rooms = new List<Rect>();
 
-    void Start()
+    IEnumerator Start()
     {
+        // Espera un frame para que BattleLoader se inicialice por completo
+        yield return null;
+
+        if (BattleLoader.Instance != null && BattleLoader.Instance.savedMapData != null)
+        {
+            Debug.Log("Restaurando mapa guardado...");
+            RestoreSavedMap(BattleLoader.Instance.savedMapData);
+            BattleLoader.Instance.savedMapData = null;
+            yield break;
+        }
+
+        Debug.Log("No hay mapa guardado. Generando nuevo nivel...");
         GenerateMap();
         RenderMap();
         PlaceStairs();
         PlaceEnemies();
-        PlaceChests(); 
+        PlaceChests();
 
-        // Colocar al jugador en el centro de la primera habitación
         if (rooms.Count > 0)
         {
             Vector2Int startPos = GetSafeSpawnPosition();
@@ -53,22 +64,17 @@ public class DungeonGenerator : MonoBehaviour
             GameObject player = Instantiate(playerPrefab, new Vector3(startPos.x, startPos.y, 0), Quaternion.identity);
             Debug.Log("Jugador instanciado en: " + player.transform.position);
 
-            // Asignar la cámara al jugador instanciado
             if (cameraFollow != null)
             {
                 cameraFollow.target = player.transform;
             }
             else
             {
-                Debug.LogWarning(" cameraFollow no está asignado en el inspector.");
+                Debug.LogWarning("cameraFollow no está asignado en el inspector.");
             }
-
-
         }
-
-
-
     }
+
 
     void GenerateMap()
     {
@@ -328,6 +334,138 @@ public class DungeonGenerator : MonoBehaviour
             Instantiate(chestPrefab, new Vector3(pos.x, pos.y, 0), Quaternion.identity);
         }
     }
+
+    public void SaveCurrentMap()
+    {
+        if (BattleLoader.Instance == null) return;
+
+        SavedMapData data = new SavedMapData();
+        data.width = width;
+        data.height = height;
+        data.tileTypes = new TileType[width * height];
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                data.tileTypes[y * width + x] = map[x, y];
+            }
+        }
+
+        foreach (var enemy in FindObjectsOfType<EnemyIdentifier>())
+        {
+            Vector2Int pos = Vector2Int.RoundToInt(enemy.transform.position);
+            data.enemies.Add(new SavedEnemy
+            {
+                prefabName = enemy.gameObject.name.Replace("(Clone)", "").Trim(),
+                position = pos,
+                enemyID = enemy.enemyID
+            });
+        }
+
+        foreach (var chest in GameObject.FindGameObjectsWithTag("Chest"))
+        {
+            data.chestPositions.Add(Vector2Int.RoundToInt(chest.transform.position));
+        }
+
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+            data.playerPosition = Vector2Int.RoundToInt(player.transform.position);
+
+        GameObject stairs = GameObject.FindGameObjectWithTag("Stairs");
+        if (stairs != null)
+            data.stairPosition = Vector2Int.RoundToInt(stairs.transform.position);
+
+        BattleLoader.Instance.savedMapData = data;
+    }
+
+
+    void RestoreSavedMap(SavedMapData data)
+    {
+        width = data.width;
+        height = data.height;
+
+        map = new TileType[width, height];
+
+        // Restaurar el layout del mapa (pisos y paredes)
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                map[x, y] = data.tileTypes[y * width + x];
+            }
+        }
+
+        RenderMap();
+
+        // Restaurar escaleras
+        Instantiate(stairPrefab, new Vector3(data.stairPosition.x, data.stairPosition.y, 0), Quaternion.identity);
+
+        // Restaurar cofres
+        foreach (var pos in data.chestPositions)
+        {
+            GameObject chest = Instantiate(chestPrefab, new Vector3(pos.x, pos.y, 0), Quaternion.identity);
+            chest.tag = "Chest"; // Asegura que mantenga su tag
+        }
+
+        // Restaurar enemigos no eliminados
+        foreach (var enemyData in data.enemies)
+        {
+            if (BattleLoader.Instance.eliminatedEnemies.Contains(enemyData.enemyID))
+            {
+                Debug.Log("Ignorando enemigo derrotado: " + enemyData.enemyID);
+                continue;
+            }
+
+            // Buscar el prefab por nombre
+            GameObject prefab = FindEnemyPrefabByName(enemyData.prefabName);
+            if (prefab == null)
+            {
+                Debug.LogWarning("No se encontró prefab para enemigo: " + enemyData.prefabName);
+                continue;
+            }
+
+            GameObject enemy = Instantiate(prefab, new Vector3(enemyData.position.x, enemyData.position.y, 0), Quaternion.identity);
+
+            // Asignar ID
+            EnemyIdentifier identifier = enemy.GetComponent<EnemyIdentifier>();
+            if (identifier == null) identifier = enemy.AddComponent<EnemyIdentifier>();
+            identifier.enemyID = enemyData.enemyID;
+
+            // Collider y trigger
+            Collider2D col = enemy.GetComponent<Collider2D>();
+            if (col == null) col = enemy.AddComponent<BoxCollider2D>();
+            col.isTrigger = true;
+
+            // Trigger de combate
+            EnemyTrigger trigger = enemy.AddComponent<EnemyTrigger>();
+            trigger.enemyPrefab = prefab;
+        }
+
+        // Restaurar jugador
+        GameObject player = Instantiate(playerPrefab, new Vector3(data.playerPosition.x, data.playerPosition.y, 0), Quaternion.identity);
+        player.tag = "Player";
+
+        if (cameraFollow != null)
+        {
+            cameraFollow.target = player.transform;
+        }
+    }
+
+
+    GameObject FindEnemyPrefabByName(string name)
+    {
+        foreach (GameObject prefab in enemyPrefabs)
+        {
+            if (prefab.name == name)
+            {
+                return prefab;
+            }
+        }
+        return null;
+    }
+
+
 
 
 

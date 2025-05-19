@@ -25,6 +25,7 @@ public class EnemyTrigger : MonoBehaviour
                 BattleLoader.Instance.defeatedEnemyID = id.enemyID;
             }
 
+            FindObjectOfType<DungeonGenerator>().SaveCurrentMap();
             UnityEngine.SceneManagement.SceneManager.LoadScene("CombatTest");
         }
     }

@@ -11,6 +11,8 @@ public class BattleLoader : MonoBehaviour
     public GameObject playerPrefab; //  PREFAB del jugador
 
     public string defeatedEnemyID;
+    public SavedMapData savedMapData;
+
 
     public HashSet<string> eliminatedEnemies = new HashSet<string>();
 
