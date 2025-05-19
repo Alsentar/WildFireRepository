@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        AdjustPlayerFacingDirection();
+        //AdjustPlayerFacingDirection();
         Move();
     }
 

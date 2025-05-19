@@ -25,6 +25,10 @@ public class CombatManager : MonoBehaviour
         GameObject playerObj = Instantiate(BattleLoader.Instance.playerPrefab, playerSpawn.position, Quaternion.identity);
         GameObject enemyObj = Instantiate(BattleLoader.Instance.enemyPrefab, enemySpawn.position, Quaternion.identity);
 
+        // Aumentar tamaño solo para combate
+        playerObj.transform.localScale = new Vector3(9f, 8f, 1f); 
+        enemyObj.transform.localScale = new Vector3(9f, 8f, 1f);
+
         playerUnit = playerObj.GetComponent<PlayerUnit>();
         enemyUnit = enemyObj.GetComponent<CombatUnit>();
 
