@@ -40,7 +40,10 @@ public class DungeonGenerator : MonoBehaviour
     IEnumerator Start()
     {
         // Espera un frame para que BattleLoader se inicialice por completo
-        yield return null;
+        while (BattleLoader.Instance == null)
+        {
+            yield return null;
+        }
 
         if (BattleLoader.Instance != null && BattleLoader.Instance.savedMapData != null)
         {
@@ -217,34 +220,20 @@ public class DungeonGenerator : MonoBehaviour
 
     public void GenerateNewLevel()
     {
-        // Destruir todos los objetos del mapa (excepto la cámara y este generador)
-        foreach (GameObject obj in FindObjectsOfType<GameObject>())
+        Debug.Log(" Bajando al siguiente nivel... reseteando mapa.");
+
+        // Borra el mapa guardado para forzar Start() a generar uno nuevo
+        if (BattleLoader.Instance != null)
         {
-            if (obj != this.gameObject && obj.name != "Main Camera")
-            {
-                Destroy(obj);
-            }
+            BattleLoader.Instance.savedMapData = null;
         }
 
-        rooms.Clear();
-        map = new TileType[width, height];
-
-        GenerateMap();
-        RenderMap();
-        PlaceStairs();
-        PlaceEnemies();
-        PlaceChests();
-
-        // Spawnear jugador de nuevo
-        Vector2Int startPos = GetSafeSpawnPosition();
-        GameObject player = Instantiate(playerPrefab, new Vector3(startPos.x, startPos.y, 0), Quaternion.identity);
-
-        // Reasignar cámara
-        if (cameraFollow != null)
-        {
-            cameraFollow.target = player.transform;
-        }
+        // Recarga la escena actual, lo que reiniciará Start()
+        UnityEngine.SceneManagement.SceneManager.LoadScene(
+            UnityEngine.SceneManagement.SceneManager.GetActiveScene().name
+        );
     }
+
 
     void PlaceEnemies()
     {
@@ -338,6 +327,7 @@ public class DungeonGenerator : MonoBehaviour
     public void SaveCurrentMap()
     {
         if (BattleLoader.Instance == null) return;
+        Debug.Log("Guardando mapa...");
 
         SavedMapData data = new SavedMapData();
         data.width = width;
