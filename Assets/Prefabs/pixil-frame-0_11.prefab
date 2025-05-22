@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4f3857d0d0a10c4498d0bf77936e4e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 4
+  moveSpeed: 6
 --- !u!50 &6744916207727483700
 Rigidbody2D:
   serializedVersion: 4
@@ -180,6 +180,10 @@ MonoBehaviour:
   - name: Slash
     power: 60
     type: 0
+    manaCost: 0
+  - name: Holy Slap
+    power: 60
+    type: 5
     manaCost: 0
 --- !u!61 &2492670503272360990
 BoxCollider2D:

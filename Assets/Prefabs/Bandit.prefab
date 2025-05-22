@@ -145,11 +145,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitName: 
-  maxHP: 50
-  currentHP: 50
+  maxHP: 100
+  currentHP: 100
   attack: 0
   defense: 0
   speed: 0
+  weaknesses: 05000000
+  resistances: 00000000
 --- !u!114 &5763546380432692350
 MonoBehaviour:
   m_ObjectHideFlags: 0

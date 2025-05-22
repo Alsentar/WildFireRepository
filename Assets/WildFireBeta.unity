@@ -215,8 +215,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d07a664d1c02d86429415a4e5716e430, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyToFight: {fileID: 8019063419482229544, guid: 68dcf4487b6a5ee41b7e6f451519a931, type: 3}
-  playerToUse: {fileID: 6621414760742700946, guid: 79e4b61745222a247a2481c166dbcfd8, type: 3}
+  enemyPrefab: {fileID: 0}
+  playerPrefab: {fileID: 0}
+  defeatedEnemyID: 
 --- !u!4 &1551652657
 Transform:
   m_ObjectHideFlags: 0
