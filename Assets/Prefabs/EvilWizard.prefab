@@ -150,6 +150,8 @@ MonoBehaviour:
   attack: 0
   defense: 0
   speed: 0
+  weaknesses: 00000000
+  resistances: 01000000
 --- !u!114 &-8642306772236136682
 MonoBehaviour:
   m_ObjectHideFlags: 0

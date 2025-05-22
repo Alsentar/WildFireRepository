@@ -66,17 +66,20 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-    public void PlayerAttack()
+    public void PlayerAttack(Attack selectedAttack)
     {
-        enemyUnit.TakeDamage(playerUnit.attack);
+        Debug.Log($"El jugador usó {selectedAttack.name}");
+
+        enemyUnit.TakeDamage(selectedAttack.power, selectedAttack.type);
         CheckBattleOutcome();
         isPlayerTurn = false;
-        StartTurn(); // pasa al enemigo
+        StartTurn();
     }
+
 
     void EnemyAttack()
     {
-        playerUnit.TakeDamage(enemyUnit.attack);
+        playerUnit.TakeDamage(enemyUnit.attack, DamageType.Physical);
         CheckBattleOutcome();
         isPlayerTurn = true;
         StartTurn();

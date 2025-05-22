@@ -168,8 +168,19 @@ MonoBehaviour:
   attack: 30
   defense: 0
   speed: 0
+  weaknesses: 
+  resistances: 
   canAct: 0
   combatManager: {fileID: 0}
+  availableAttacks:
+  - name: Fire
+    power: 60
+    type: 1
+    manaCost: 0
+  - name: Slash
+    power: 60
+    type: 0
+    manaCost: 0
 --- !u!61 &2492670503272360990
 BoxCollider2D:
   m_ObjectHideFlags: 0

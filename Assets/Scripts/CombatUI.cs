@@ -2,33 +2,51 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class CombatUI : MonoBehaviour
 {
     public Button attackButton;
+    //public PlayerUnit playerUnit;
+
+    public GameObject attackOptionsPanel;
+    public GameObject attackButtonPrefab; // Prefab de botón reutilizable
+    public Transform buttonContainer;     // El panel padre donde instancias los botones
+
     public PlayerUnit playerUnit;
+    public CombatManager combatManager;
 
     void Start()
     {
-        attackButton.onClick.AddListener(OnAttackButtonPressed);
-        attackButton.interactable = false; // por defecto
+        attackButton.onClick.AddListener(ShowAttackOptions);
+        attackOptionsPanel.SetActive(false);
     }
 
-    void Update()
+    void ShowAttackOptions()
     {
-        // Activa o desactiva botón según si el jugador puede actuar
-        if (playerUnit != null)
+        attackOptionsPanel.SetActive(true);
+
+        // Limpiar botones anteriores
+        foreach (Transform child in buttonContainer)
         {
-            attackButton.interactable = playerUnit.canAct;
+            Destroy(child.gameObject);
+        }
+
+        // Crear botones para cada ataque
+        foreach (Attack atk in playerUnit.availableAttacks)
+        {
+            GameObject btn = Instantiate(attackButtonPrefab, buttonContainer);
+            Debug.Log($"Instanciado botón para: {atk.name}");
+            btn.GetComponentInChildren<TextMeshProUGUI>().text = atk.name;
+            btn.GetComponent<Button>().onClick.AddListener(() => SelectAttack(atk));
         }
     }
 
-    void OnAttackButtonPressed()
+    void SelectAttack(Attack atk)
     {
-        if (playerUnit != null && playerUnit.canAct)
-        {
-            playerUnit.canAct = false;
-            playerUnit.combatManager.PlayerAttack();
-        }
+        attackOptionsPanel.SetActive(false);
+        //playerUnit.canAct = false;
+        combatManager.PlayerAttack(atk);
     }
+
 }
