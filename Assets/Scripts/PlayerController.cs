@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private Animator myAnimator;
     private SpriteRenderer mySpriteRender;
+    private Vector2 lastDirection = Vector2.down; // Por defecto, mirando hacia abajo
+
 
     private void Awake()
     {
@@ -40,14 +42,30 @@ public class PlayerController : MonoBehaviour
     {
         movement = playerControls.Movement.Move.ReadValue<Vector2>();
 
-        //myAnimator.SetFloat("moveX", movement.x);
-        //myAnimator.SetFloat("moveY", movement.y);
+        // Determinar dirección cardinal dominante
+        if (movement != Vector2.zero)
+        {
+            // Prioriza eje dominante
+            if (Mathf.Abs(movement.x) > Mathf.Abs(movement.y))
+            {
+                if (movement.x > 0)
+                    myAnimator.SetInteger("direction", 2); // Right
+                else
+                    myAnimator.SetInteger("direction", 1); // Left
+            }
+            else
+            {
+                if (movement.y > 0)
+                    myAnimator.SetInteger("direction", 3); // Up
+                else
+                    myAnimator.SetInteger("direction", 0); // Down
+            }
+        }
 
-        // Activar animaciones según movimiento
-        myAnimator.SetFloat("moveX", movement.x);
-        myAnimator.SetFloat("moveY", movement.y);
         myAnimator.SetBool("isMoving", movement != Vector2.zero);
     }
+
+
 
     private void Move()
     {
