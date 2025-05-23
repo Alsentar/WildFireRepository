@@ -30,7 +30,7 @@ public class EnemyTrigger : MonoBehaviour
             PlayerUnit player = FindObjectOfType<PlayerUnit>();
             if (player != null && BattleLoader.Instance != null)
             {
-                BattleLoader.Instance.playerCurrentHP = player.currentHP;
+                //BattleLoader.Instance.playerCurrentHP = player.currentHP;
             }
 
             UnityEngine.SceneManagement.SceneManager.LoadScene("CombatTest");

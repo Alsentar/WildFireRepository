@@ -33,17 +33,18 @@ public class CombatManager : MonoBehaviour
 
         if (BattleLoader.Instance != null)
         {
-            if (BattleLoader.Instance.playerCurrentHP > 0)
+            if (BattleLoader.Instance.playerCurrentHP >= 0)
             {
                 playerUnit.currentHP = BattleLoader.Instance.playerCurrentHP;
-                
-
+                Debug.Log("Se restauró la vida desde BattleLoader: " + playerUnit.currentHP);
             }
             else
             {
-                playerUnit.currentHP = playerUnit.maxHP; // primer combate
+                playerUnit.currentHP = playerUnit.maxHP;
                 BattleLoader.Instance.playerCurrentHP = playerUnit.maxHP;
+                Debug.Log("Primer combate, vida a full: " + playerUnit.currentHP);
             }
+
 
             Debug.Log("Vida restaurada del jugador: " + playerUnit.currentHP);
         }
@@ -138,14 +139,15 @@ public class CombatManager : MonoBehaviour
         if (enemyUnit.currentHP <= 0)
         {
             Debug.Log("El enemigo ha sido derrotado.");
-            BattleLoader.Instance.eliminatedEnemies.Add(BattleLoader.Instance.defeatedEnemyID);
 
             if (BattleLoader.Instance != null)
             {
                 BattleLoader.Instance.playerCurrentHP = playerUnit.currentHP;
             }
+            BattleLoader.Instance.eliminatedEnemies.Add(BattleLoader.Instance.defeatedEnemyID);
 
 
+            Debug.Log("Guardando vida actual del jugador: " + playerUnit.currentHP);
             SceneManager.LoadScene("WildFireBeta");
         }
     }

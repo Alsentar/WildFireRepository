@@ -23,8 +23,8 @@ public class DungeonGenerator : MonoBehaviour
     public GameObject[] enemyPrefabs; // Lista de prefabs de enemigos
     public int enemiesPerLevel = 5;   // Cuántos enemigos generar por nivel
     public GameObject chestPrefab;         // Prefab del cofre
-    public int minChests = 2;              // Cantidad mínima de cofres por mapa
-    public int maxChests = 3;              // Cantidad máxima de cofres por mapa
+    public int minChests = 1;              // Cantidad mínima de cofres por mapa
+    public int maxChests = 2;              // Cantidad máxima de cofres por mapa
 
 
 
@@ -65,6 +65,22 @@ public class DungeonGenerator : MonoBehaviour
             Vector2Int startPos = GetSafeSpawnPosition();
             Debug.Log("Instanciando jugador en posición: " + startPos);
             GameObject player = Instantiate(playerPrefab, new Vector3(startPos.x, startPos.y, 0), Quaternion.identity);
+            PlayerUnit playerUnit = player.GetComponent<PlayerUnit>();
+
+            if (BattleLoader.Instance != null && BattleLoader.Instance.playerCurrentHP >= 0)
+            {
+                playerUnit.currentHP = BattleLoader.Instance.playerCurrentHP;
+                Debug.Log(" Se restauró la vida del jugador desde BattleLoader: " + playerUnit.currentHP);
+            }
+            else
+            {
+                playerUnit.currentHP = playerUnit.maxHP;
+                BattleLoader.Instance.playerCurrentHP = playerUnit.maxHP;
+                Debug.Log(" Vida del jugador inicializada a full HP: " + playerUnit.currentHP);
+            }
+
+
+
             Debug.Log("Jugador instanciado en: " + player.transform.position);
 
             if (cameraFollow != null)
@@ -198,25 +214,36 @@ public class DungeonGenerator : MonoBehaviour
 
     void PlaceStairs()
     {
-        List<Vector2Int> floorPositions = new List<Vector2Int>();
+        List<Vector2Int> validStairPositions = new List<Vector2Int>();
+        Rect playerRoom = rooms[0];
 
+        // Recolectar solo celdas de piso que NO estén en la sala del jugador
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
                 if (map[x, y] == TileType.Floor)
                 {
-                    floorPositions.Add(new Vector2Int(x, y));
+                    Vector2Int pos = new Vector2Int(x, y);
+                    if (!playerRoom.Contains(new Vector2(pos.x + 0.5f, pos.y + 0.5f))) // +0.5 para coincidir con centro de celda
+                    {
+                        validStairPositions.Add(pos);
+                    }
                 }
             }
         }
 
-        if (floorPositions.Count > 0)
+        if (validStairPositions.Count > 0)
         {
-            Vector2Int pos = floorPositions[Random.Range(0, floorPositions.Count)];
+            Vector2Int pos = validStairPositions[Random.Range(0, validStairPositions.Count)];
             Instantiate(stairPrefab, new Vector3(pos.x, pos.y, 0), Quaternion.identity);
         }
+        else
+        {
+            Debug.LogWarning("No se encontraron posiciones válidas fuera de la sala del jugador para colocar escaleras.");
+        }
     }
+
 
     public void GenerateNewLevel()
     {

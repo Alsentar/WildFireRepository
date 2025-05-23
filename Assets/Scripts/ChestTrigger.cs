@@ -19,6 +19,23 @@ public class ChestTrigger : MonoBehaviour
         {
             animator.SetTrigger("Open");
             isOpened = true;
+
+            PlayerUnit player = collision.GetComponent<PlayerUnit>();
+            if (player != null)
+            {
+                int healAmount = 30;
+                player.currentHP = Mathf.Min(player.maxHP, player.currentHP + healAmount);
+
+                if (BattleLoader.Instance != null)
+                {
+                    BattleLoader.Instance.playerCurrentHP = player.currentHP;
+                }
+
+                Debug.Log("El jugador se curó al abrir el cofre. HP actual: " + player.currentHP);
+            }
+
+            //Destroy(gameObject); // opcional
         }
     }
+
 }
