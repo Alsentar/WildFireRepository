@@ -15,6 +15,8 @@ public class CombatUnit : MonoBehaviour
     public int speed;
     public List<DamageType> weaknesses;
     public List<DamageType> resistances;
+    public List<Attack> availableAttacks = new List<Attack>();
+
 
     /**
     public enum DamageType

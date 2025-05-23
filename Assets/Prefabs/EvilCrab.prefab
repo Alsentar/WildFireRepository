@@ -144,14 +144,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9de515c64fdabb84cb10cb61c3bd4d35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitName: 
+  unitName: "Crustaceo Taca\xF1o"
   maxHP: 300
   currentHP: 300
-  attack: 0
+  attack: 45
   defense: 0
   speed: 0
   weaknesses: 01000000
   resistances: 00000000
+  availableAttacks:
+  - name: Chorro
+    power: 30
+    type: 2
+    manaCost: 0
 --- !u!114 &-1749912591548552928
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -144,14 +144,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9de515c64fdabb84cb10cb61c3bd4d35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitName: 
+  unitName: Hiedra Malevola
   maxHP: 60
   currentHP: 60
-  attack: 0
+  attack: 30
   defense: 0
   speed: 0
-  weaknesses: 00000000
-  resistances: 01000000
+  weaknesses: 01000000
+  resistances: 00000000
+  availableAttacks:
+  - name: Lluvia
+    power: 30
+    type: 2
+    manaCost: 0
 --- !u!114 &-3800297885379766499
 MonoBehaviour:
   m_ObjectHideFlags: 0

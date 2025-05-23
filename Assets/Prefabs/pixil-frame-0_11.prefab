@@ -163,28 +163,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitName: 
-  maxHP: 500
-  currentHP: 500
+  maxHP: 100
+  currentHP: 0
   attack: 30
   defense: 0
   speed: 0
-  weaknesses: 
-  resistances: 
-  canAct: 0
-  combatManager: {fileID: 0}
+  weaknesses: 02000000
+  resistances: 01000000
   availableAttacks:
   - name: Fire
-    power: 60
+    power: 45
     type: 1
     manaCost: 0
   - name: Slash
-    power: 60
+    power: 30
     type: 0
     manaCost: 0
   - name: Holy Slap
-    power: 60
+    power: 25
     type: 5
     manaCost: 0
+  canAct: 0
+  combatManager: {fileID: 0}
 --- !u!61 &2492670503272360990
 BoxCollider2D:
   m_ObjectHideFlags: 0

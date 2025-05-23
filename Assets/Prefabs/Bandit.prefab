@@ -144,14 +144,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9de515c64fdabb84cb10cb61c3bd4d35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitName: 
+  unitName: Bandido
   maxHP: 100
   currentHP: 100
-  attack: 0
+  attack: 40
   defense: 0
   speed: 0
   weaknesses: 05000000
   resistances: 00000000
+  availableAttacks:
+  - name: Scimitar
+    power: 30
+    type: 0
+    manaCost: 0
 --- !u!114 &5763546380432692350
 MonoBehaviour:
   m_ObjectHideFlags: 0

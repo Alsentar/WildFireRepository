@@ -99,14 +99,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9de515c64fdabb84cb10cb61c3bd4d35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitName: 
+  unitName: Orco
   maxHP: 500
   currentHP: 500
-  attack: 0
+  attack: 80
   defense: 0
   speed: 0
   weaknesses: 01000000
   resistances: 00000000
+  availableAttacks:
+  - name: Club
+    power: 50
+    type: 0
+    manaCost: 0
 --- !u!114 &5540462389133374596
 MonoBehaviour:
   m_ObjectHideFlags: 0

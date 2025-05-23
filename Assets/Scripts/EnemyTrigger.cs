@@ -26,6 +26,13 @@ public class EnemyTrigger : MonoBehaviour
             }
 
             FindObjectOfType<DungeonGenerator>().SaveCurrentMap();
+
+            PlayerUnit player = FindObjectOfType<PlayerUnit>();
+            if (player != null && BattleLoader.Instance != null)
+            {
+                BattleLoader.Instance.playerCurrentHP = player.currentHP;
+            }
+
             UnityEngine.SceneManagement.SceneManager.LoadScene("CombatTest");
         }
     }

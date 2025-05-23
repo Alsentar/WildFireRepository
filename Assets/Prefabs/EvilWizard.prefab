@@ -144,14 +144,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9de515c64fdabb84cb10cb61c3bd4d35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitName: 
+  unitName: Mago Tenebroso
   maxHP: 60
   currentHP: 60
-  attack: 0
+  attack: 50
   defense: 0
   speed: 0
   weaknesses: 00000000
   resistances: 01000000
+  availableAttacks:
+  - name: Fireball
+    power: 30
+    type: 1
+    manaCost: 0
 --- !u!114 &-8642306772236136682
 MonoBehaviour:
   m_ObjectHideFlags: 0
