@@ -24,7 +24,9 @@ public class ChestTrigger : MonoBehaviour
             if (player != null)
             {
                 int healAmount = 30;
-                player.currentHP = Mathf.Min(player.maxHP, player.currentHP + healAmount);
+                player.currentHP = BattleLoader.Instance.playerCurrentHP;
+                //player.currentHP = Mathf.Min(player.maxHP, player.currentHP + healAmount);
+                player.currentHP = player.currentHP + healAmount;
 
                 if (BattleLoader.Instance != null)
                 {

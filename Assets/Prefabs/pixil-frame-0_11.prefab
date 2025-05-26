@@ -169,7 +169,7 @@ MonoBehaviour:
   defense: 0
   speed: 0
   weaknesses: 02000000
-  resistances: 01000000
+  resistances: 0100000000000000
   availableAttacks:
   - name: Fire
     power: 45

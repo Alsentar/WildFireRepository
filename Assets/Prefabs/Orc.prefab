@@ -100,8 +100,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitName: Orco
-  maxHP: 500
-  currentHP: 500
+  maxHP: 300
+  currentHP: 300
   attack: 80
   defense: 0
   speed: 0
