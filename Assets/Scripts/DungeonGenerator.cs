@@ -67,6 +67,12 @@ public class DungeonGenerator : MonoBehaviour
             GameObject player = Instantiate(playerPrefab, new Vector3(startPos.x, startPos.y, 0), Quaternion.identity);
             PlayerUnit playerUnit = player.GetComponent<PlayerUnit>();
 
+            playerUnit.level = BattleLoader.Instance.playerLevel > 0 ? BattleLoader.Instance.playerLevel : 1;
+            playerUnit.currentXP = BattleLoader.Instance.playerXP;
+            playerUnit.xpToNextLevel = BattleLoader.Instance.playerXPToNext > 0 ? BattleLoader.Instance.playerXPToNext : 100;
+
+
+
             if (BattleLoader.Instance != null && BattleLoader.Instance.playerCurrentHP >= 0)
             {
                 playerUnit.currentHP = BattleLoader.Instance.playerCurrentHP;
@@ -315,6 +321,14 @@ public class DungeonGenerator : MonoBehaviour
             // Agregar EnemyTrigger dinámicamente
             EnemyTrigger trigger = enemyInstance.AddComponent<EnemyTrigger>();
             trigger.enemyPrefab = enemyToSpawn;
+
+            //Randomizar nivel de enemigo
+            CombatUnit cu = enemyInstance.GetComponent<CombatUnit>();
+            if (cu != null)
+            {
+                cu.level = Random.Range(1, 4); // Nivel entre 1 y 3
+            }
+
         }
     }
 

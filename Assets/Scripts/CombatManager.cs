@@ -45,6 +45,12 @@ public class CombatManager : MonoBehaviour
                 Debug.Log("Primer combate, vida a full: " + playerUnit.currentHP);
             }
 
+            Debug.Log("Restaurando nivel y experiencia");
+            // Restaurar nivel y experiencia
+            playerUnit.level = BattleLoader.Instance.playerLevel > 0 ? BattleLoader.Instance.playerLevel : 1;
+            playerUnit.currentXP = BattleLoader.Instance.playerXP;
+            playerUnit.xpToNextLevel = BattleLoader.Instance.playerXPToNext > 0 ? BattleLoader.Instance.playerXPToNext : 100;
+
 
             Debug.Log("Vida restaurada del jugador: " + playerUnit.currentHP);
         }
@@ -143,11 +149,21 @@ public class CombatManager : MonoBehaviour
             if (BattleLoader.Instance != null)
             {
                 BattleLoader.Instance.playerCurrentHP = playerUnit.currentHP;
+                // Guardar progreso aunque no haya subido de nivel
+                BattleLoader.Instance.playerLevel = playerUnit.level;
+                BattleLoader.Instance.playerXP = playerUnit.currentXP;
+                BattleLoader.Instance.playerXPToNext = playerUnit.xpToNextLevel;
             }
             BattleLoader.Instance.eliminatedEnemies.Add(BattleLoader.Instance.defeatedEnemyID);
 
+            // GANAR XP
+            int xpEarned = 20 + enemyUnit.level * 10; // Fórmula simple de XP
+            playerUnit.GainXP(xpEarned);
+
+            Debug.Log($"Jugador ganó {xpEarned} XP.");
 
             Debug.Log("Guardando vida actual del jugador: " + playerUnit.currentHP);
+
             SceneManager.LoadScene("WildFireBeta");
         }
     }

@@ -17,6 +17,43 @@ public class CombatUnit : MonoBehaviour
     public List<DamageType> resistances;
     public List<Attack> availableAttacks = new List<Attack>();
 
+    public int level = 1;
+    public int currentXP = 0;
+    public int xpToNextLevel = 100;
+
+    // Crecimiento base por personaje
+    public int baseAttackGrowth = 2;
+    public int baseDefenseGrowth = 1;
+    public int baseSpeedGrowth = 2;
+
+    public virtual void GainXP(int amount)
+    {
+        currentXP += amount;
+        while (currentXP >= xpToNextLevel)
+        {
+            currentXP -= xpToNextLevel;
+            LevelUp();
+        }
+    }
+
+    protected virtual void LevelUp()
+    {
+        level++;
+        xpToNextLevel = Mathf.RoundToInt(xpToNextLevel * 1.2f);
+
+        attack += baseAttackGrowth;
+        defense += baseDefenseGrowth;
+        speed += baseSpeedGrowth;
+
+        Debug.Log($"{unitName} subió al nivel {level}! ATK: {attack}, DEF: {defense}, SPD: {speed}");
+
+        BattleLoader.Instance.playerLevel = this.level;
+        BattleLoader.Instance.playerXP = this.currentXP;
+        BattleLoader.Instance.playerXPToNext = this.xpToNextLevel;
+
+    }
+
+
 
     /**
     public enum DamageType

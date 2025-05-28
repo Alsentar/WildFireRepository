@@ -15,6 +15,11 @@ public class BattleLoader : MonoBehaviour
 
     public int playerCurrentHP = -1; // -1 indica que no se ha inicializado todavía
 
+    public int playerLevel = 1;
+    public int playerXP = 0;
+    public int playerXPToNext = 100;
+
+
 
 
     public HashSet<string> eliminatedEnemies = new HashSet<string>();
