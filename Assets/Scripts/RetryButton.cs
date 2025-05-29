@@ -10,21 +10,27 @@ public class RetryButton : MonoBehaviour
 
     public void RetryGame()
     {
-        // Limpiar datos persistentes del combate anterior
         if (BattleLoader.Instance != null)
         {
             BattleLoader.Instance.eliminatedEnemies.Clear();
             BattleLoader.Instance.savedMapData = null;
-            BattleLoader.Instance.playerCurrentHP = -1;
-            BattleLoader.Instance.playerPrefab = null;
             BattleLoader.Instance.enemyPrefab = null;
 
+            // Restaurar el estado base de cada personaje de la party
+            foreach (CharacterData character in BattleLoader.Instance.party)
+            {
+                character.currentHP = character.maxHP;
+                character.currentXP = 0;
+                character.level = 1;
+                character.xpToNextLevel = 100;
+
+                character.attack = 10 + (character.baseAttackGrowth * (character.level - 1));
+                character.defense = 2 + (character.baseDefenseGrowth * (character.level - 1));
+                character.speed = 3 + (character.baseSpeedGrowth * (character.level - 1));
+            }
         }
 
-        
-
-
-        // Cargar la escena principal
         SceneManager.LoadScene(sceneToLoad);
     }
+
 }

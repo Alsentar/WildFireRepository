@@ -22,7 +22,39 @@ public class CombatManager : MonoBehaviour
             return;
         }
 
-        GameObject playerObj = Instantiate(BattleLoader.Instance.playerPrefab, playerSpawn.position, Quaternion.identity);
+        CharacterData kasaiData = BattleLoader.Instance.GetCharacter("Kasai");
+
+        if (kasaiData == null)
+        {
+            Debug.LogError("No se encontró a Kasai en la party.");
+            return;
+        }
+
+        // Cargar prefab desde Resources
+        GameObject kasaiPrefab = Resources.Load<GameObject>(kasaiData.prefabName);
+        if (kasaiPrefab == null)
+        {
+            Debug.LogError("No se pudo cargar el prefab: " + kasaiData.prefabName);
+            return;
+        }
+
+        GameObject playerObj = Instantiate(kasaiPrefab, playerSpawn.position, Quaternion.identity);
+        playerUnit = playerObj.GetComponent<PlayerUnit>();
+
+        // Asignar los stats desde CharacterData
+        playerUnit.unitName = kasaiData.id;
+        playerUnit.level = kasaiData.level;
+        playerUnit.currentHP = kasaiData.currentHP;
+        playerUnit.maxHP = kasaiData.maxHP;
+        playerUnit.attack = kasaiData.attack;
+        playerUnit.defense = kasaiData.defense;
+        playerUnit.speed = kasaiData.speed;
+        playerUnit.currentXP = kasaiData.currentXP;
+        playerUnit.xpToNextLevel = kasaiData.xpToNextLevel;
+        playerUnit.baseAttackGrowth = kasaiData.baseAttackGrowth;
+        playerUnit.baseDefenseGrowth = kasaiData.baseDefenseGrowth;
+        playerUnit.baseSpeedGrowth = kasaiData.baseSpeedGrowth;
+
         GameObject enemyObj = Instantiate(BattleLoader.Instance.enemyPrefab, enemySpawn.position, Quaternion.identity);
 
         // Aumentar tamaño solo para combate
@@ -31,29 +63,7 @@ public class CombatManager : MonoBehaviour
 
         playerUnit = playerObj.GetComponent<PlayerUnit>();
 
-        if (BattleLoader.Instance != null)
-        {
-            if (BattleLoader.Instance.playerCurrentHP >= 0)
-            {
-                playerUnit.currentHP = BattleLoader.Instance.playerCurrentHP;
-                Debug.Log("Se restauró la vida desde BattleLoader: " + playerUnit.currentHP);
-            }
-            else
-            {
-                playerUnit.currentHP = playerUnit.maxHP;
-                BattleLoader.Instance.playerCurrentHP = playerUnit.maxHP;
-                Debug.Log("Primer combate, vida a full: " + playerUnit.currentHP);
-            }
-
-            Debug.Log("Restaurando nivel y experiencia");
-            // Restaurar nivel y experiencia
-            playerUnit.level = BattleLoader.Instance.playerLevel > 0 ? BattleLoader.Instance.playerLevel : 1;
-            playerUnit.currentXP = BattleLoader.Instance.playerXP;
-            playerUnit.xpToNextLevel = BattleLoader.Instance.playerXPToNext > 0 ? BattleLoader.Instance.playerXPToNext : 100;
-
-
-            Debug.Log("Vida restaurada del jugador: " + playerUnit.currentHP);
-        }
+        
 
 
 
@@ -90,7 +100,7 @@ public class CombatManager : MonoBehaviour
     {
         if (isPlayerTurn)
         {
-            Debug.Log("Turno del jugador. Presiona ESPACIO para atacar.");
+            Debug.Log("Turno del jugador.");
             playerUnit.canAct = true;
         }
         else
@@ -103,7 +113,7 @@ public class CombatManager : MonoBehaviour
     public void PlayerAttack(Attack selectedAttack)
     {
         Debug.Log($"El jugador usó {selectedAttack.name}");
-
+        int totalPower = selectedAttack.power + playerUnit.attack; // Combinar ataque base + stat
         enemyUnit.TakeDamage(selectedAttack.power, selectedAttack.type);
         CheckBattleOutcome();
         isPlayerTurn = false;
@@ -146,21 +156,31 @@ public class CombatManager : MonoBehaviour
         {
             Debug.Log("El enemigo ha sido derrotado.");
 
-            if (BattleLoader.Instance != null)
-            {
-                BattleLoader.Instance.playerCurrentHP = playerUnit.currentHP;
-                // Guardar progreso aunque no haya subido de nivel
-                BattleLoader.Instance.playerLevel = playerUnit.level;
-                BattleLoader.Instance.playerXP = playerUnit.currentXP;
-                BattleLoader.Instance.playerXPToNext = playerUnit.xpToNextLevel;
-            }
-            BattleLoader.Instance.eliminatedEnemies.Add(BattleLoader.Instance.defeatedEnemyID);
+            
 
-            // GANAR XP
+
             int xpEarned = 20 + enemyUnit.level * 10; // Fórmula simple de XP
             playerUnit.GainXP(xpEarned);
 
+            CharacterData kasai = BattleLoader.Instance.GetCharacter("Kasai");
+            if (kasai != null)
+            {
+                kasai.currentHP = playerUnit.currentHP;
+                kasai.level = playerUnit.level;
+                kasai.currentXP = playerUnit.currentXP;
+                kasai.xpToNextLevel = playerUnit.xpToNextLevel;
+                kasai.attack = playerUnit.attack;
+                kasai.defense = playerUnit.defense;
+                kasai.speed = playerUnit.speed;
+            }
+
             Debug.Log($"Jugador ganó {xpEarned} XP.");
+
+            
+            BattleLoader.Instance.eliminatedEnemies.Add(BattleLoader.Instance.defeatedEnemyID);
+
+            // GANAR XP
+            
 
             Debug.Log("Guardando vida actual del jugador: " + playerUnit.currentHP);
 

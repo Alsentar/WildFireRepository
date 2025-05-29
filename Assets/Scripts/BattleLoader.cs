@@ -13,11 +13,15 @@ public class BattleLoader : MonoBehaviour
     public string defeatedEnemyID;
     public SavedMapData savedMapData;
 
-    public int playerCurrentHP = -1; // -1 indica que no se ha inicializado todavía
+    
 
-    public int playerLevel = 1;
-    public int playerXP = 0;
-    public int playerXPToNext = 100;
+    public List<CharacterData> party = new List<CharacterData>();
+
+    public CharacterData GetCharacter(string id)
+    {
+        return party.Find(c => c.id == id);
+    }
+
 
 
 
@@ -37,5 +41,29 @@ public class BattleLoader : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        if (party.Count == 0)
+        {
+            CharacterData kasai = new CharacterData
+            {
+                id = "Kasai",
+                prefabName = "Prefabs/KasaiPrefab",  // Usa el nombre exacto del prefab en la carpeta Resources
+                level = 1,
+                maxHP = 100,
+                currentHP = 100,
+                attack = 10,
+                defense = 2,
+                speed = 3,
+                currentXP = 0,
+                xpToNextLevel = 100,
+                baseAttackGrowth = 2,
+                baseDefenseGrowth = 1,
+                baseSpeedGrowth = 2
+            };
+
+            party.Add(kasai);
+        }
+
+
     }
 }

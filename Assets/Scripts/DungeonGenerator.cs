@@ -64,26 +64,40 @@ public class DungeonGenerator : MonoBehaviour
         {
             Vector2Int startPos = GetSafeSpawnPosition();
             Debug.Log("Instanciando jugador en posición: " + startPos);
-            GameObject player = Instantiate(playerPrefab, new Vector3(startPos.x, startPos.y, 0), Quaternion.identity);
+            
+
+            CharacterData kasai = BattleLoader.Instance.GetCharacter("Kasai");
+
+            if (kasai == null)
+            {
+                Debug.LogError("Kasai no se encontró en la party.");
+                yield break;
+            }
+
+            GameObject kasaiPrefab = Resources.Load<GameObject>(kasai.prefabName);
+            if (kasaiPrefab == null)
+            {
+                Debug.LogError("No se pudo cargar el prefab de Kasai desde Resources.");
+                yield break;
+            }
+
+            GameObject player = Instantiate(kasaiPrefab, new Vector3(startPos.x, startPos.y, 0), Quaternion.identity);
             PlayerUnit playerUnit = player.GetComponent<PlayerUnit>();
 
-            playerUnit.level = BattleLoader.Instance.playerLevel > 0 ? BattleLoader.Instance.playerLevel : 1;
-            playerUnit.currentXP = BattleLoader.Instance.playerXP;
-            playerUnit.xpToNextLevel = BattleLoader.Instance.playerXPToNext > 0 ? BattleLoader.Instance.playerXPToNext : 100;
+            // Asignar datos desde CharacterData
+            playerUnit.unitName = kasai.id;
+            playerUnit.level = kasai.level;
+            playerUnit.currentHP = kasai.currentHP;
+            playerUnit.maxHP = kasai.maxHP;
+            playerUnit.attack = kasai.attack;
+            playerUnit.defense = kasai.defense;
+            playerUnit.speed = kasai.speed;
+            playerUnit.currentXP = kasai.currentXP;
+            playerUnit.xpToNextLevel = kasai.xpToNextLevel;
+            playerUnit.baseAttackGrowth = kasai.baseAttackGrowth;
+            playerUnit.baseDefenseGrowth = kasai.baseDefenseGrowth;
+            playerUnit.baseSpeedGrowth = kasai.baseSpeedGrowth;
 
-
-
-            if (BattleLoader.Instance != null && BattleLoader.Instance.playerCurrentHP >= 0)
-            {
-                playerUnit.currentHP = BattleLoader.Instance.playerCurrentHP;
-                Debug.Log(" Se restauró la vida del jugador desde BattleLoader: " + playerUnit.currentHP);
-            }
-            else
-            {
-                playerUnit.currentHP = playerUnit.maxHP;
-                BattleLoader.Instance.playerCurrentHP = playerUnit.maxHP;
-                Debug.Log(" Vida del jugador inicializada a full HP: " + playerUnit.currentHP);
-            }
 
 
 

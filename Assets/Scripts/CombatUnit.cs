@@ -47,9 +47,7 @@ public class CombatUnit : MonoBehaviour
 
         Debug.Log($"{unitName} subió al nivel {level}! ATK: {attack}, DEF: {defense}, SPD: {speed}");
 
-        BattleLoader.Instance.playerLevel = this.level;
-        BattleLoader.Instance.playerXP = this.currentXP;
-        BattleLoader.Instance.playerXPToNext = this.xpToNextLevel;
+        
 
     }
 
