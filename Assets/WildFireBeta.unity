@@ -218,6 +218,7 @@ MonoBehaviour:
   enemyPrefab: {fileID: 0}
   playerPrefab: {fileID: 0}
   defeatedEnemyID: 
+  party: []
 --- !u!4 &1551652657
 Transform:
   m_ObjectHideFlags: 0
