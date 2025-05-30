@@ -38,7 +38,20 @@ public class CombatManager : MonoBehaviour
             return;
         }
 
-        GameObject playerObj = Instantiate(kasaiPrefab, playerSpawn.position, Quaternion.identity);
+
+        Vector3 offscreenRight = Camera.main.ViewportToWorldPoint(new Vector3(1.2f, 0.46f, 0f));
+        offscreenRight.z = 0f;
+        GameObject playerObj = Instantiate(kasaiPrefab, offscreenRight, Quaternion.identity); // empieza fuera de pantalla
+        playerUnit = playerObj.GetComponent<PlayerUnit>();
+
+        PlayerController controller = playerObj.GetComponent<PlayerController>();
+        if (controller != null)
+        {
+            controller.allowManualControl = false;
+        }
+
+        StartCoroutine(MoveToPosition(playerObj, playerSpawn.position, 1.5f));
+
         playerUnit = playerObj.GetComponent<PlayerUnit>();
 
         // Asignar los stats desde CharacterData
@@ -92,8 +105,51 @@ public class CombatManager : MonoBehaviour
         }
 
 
-        StartTurn();
+        
     }
+
+    IEnumerator MoveToPosition(GameObject unit, Vector3 target, float duration)
+    {
+        Debug.Log("Animación de caminar activada");
+        Animator anim = unit.GetComponent<Animator>();
+
+        Vector3 start = unit.transform.position;
+        Vector3 direction = (target - start).normalized;
+
+        //  Establecer dirección automática según vector
+        if (anim != null)
+        {
+            anim.SetBool("isMoving", true);
+
+            if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
+            {
+                anim.SetInteger("direction", direction.x > 0 ? 2 : 1); // Right or Left
+            }
+            else
+            {
+                anim.SetInteger("direction", direction.y > 0 ? 3 : 0); // Up or Down
+            }
+        }
+
+        float elapsed = 0;
+
+        while (elapsed < duration)
+        {
+            unit.transform.position = Vector3.Lerp(start, target, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        unit.transform.position = target;
+
+        if (anim != null)
+        {
+            anim.SetBool("isMoving", false);
+        }
+
+        StartTurn(); // solo ahora empieza el combate
+    }
+
 
 
     void StartTurn()

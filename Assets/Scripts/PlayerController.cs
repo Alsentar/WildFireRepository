@@ -6,6 +6,9 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 1f;
 
+    public bool allowManualControl = true;
+
+
     private PlayerControls playerControls;
     private Vector2 movement;
     private Rigidbody2D rb;
@@ -40,30 +43,30 @@ public class PlayerController : MonoBehaviour
 
     private void PlayerInput()
     {
+        if (!allowManualControl)
+        {
+          
+            return;
+        }
+
         movement = playerControls.Movement.Move.ReadValue<Vector2>();
 
-        // Determinar dirección cardinal dominante
+        // Dirección
         if (movement != Vector2.zero)
         {
-            // Prioriza eje dominante
             if (Mathf.Abs(movement.x) > Mathf.Abs(movement.y))
             {
-                if (movement.x > 0)
-                    myAnimator.SetInteger("direction", 2); // Right
-                else
-                    myAnimator.SetInteger("direction", 1); // Left
+                myAnimator.SetInteger("direction", movement.x > 0 ? 2 : 1);
             }
             else
             {
-                if (movement.y > 0)
-                    myAnimator.SetInteger("direction", 3); // Up
-                else
-                    myAnimator.SetInteger("direction", 0); // Down
+                myAnimator.SetInteger("direction", movement.y > 0 ? 3 : 0);
             }
         }
 
         myAnimator.SetBool("isMoving", movement != Vector2.zero);
     }
+
 
 
 
