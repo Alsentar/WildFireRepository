@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 12a519f9cb851e44ab68b0ed147d891a
+guid: 63d21e3d3f1cfac4c8e15873b7bef48b
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -95,7 +95,91 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Kasai Fire Attack (2)_0
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 23
+        width: 40
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7fa610f8d679ba841ae4c86608f79a86
+      internalID: -1235224509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kasai Fire Attack (2)_1
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 23
+        width: 40
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 42e7ed2253700ce438f7a1f81000c8bf
+      internalID: -180533353
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kasai Fire Attack (2)_2
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 23
+        width: 40
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 28a8a130f82c145428d673ca22365638
+      internalID: -551856555
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Kasai Fire Attack (2)_3
+      rect:
+        serializedVersion: 2
+        x: 122
+        y: 23
+        width: 40
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6124bc62701bfce498b5d2d767213f45
+      internalID: -439833686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -106,7 +190,11 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Kasai Fire Attack (2)_0: -1235224509
+      Kasai Fire Attack (2)_1: -180533353
+      Kasai Fire Attack (2)_2: -551856555
+      Kasai Fire Attack (2)_3: -439833686
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

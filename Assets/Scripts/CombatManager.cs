@@ -145,7 +145,13 @@ public class CombatManager : MonoBehaviour
         if (anim != null)
         {
             anim.SetBool("isMoving", false);
+
+            anim.SetBool("inCombat", true);
+
         }
+
+        
+
 
         StartTurn(); // solo ahora empieza el combate
     }
@@ -169,12 +175,39 @@ public class CombatManager : MonoBehaviour
     public void PlayerAttack(Attack selectedAttack)
     {
         Debug.Log($"El jugador usó {selectedAttack.name}");
-        int totalPower = selectedAttack.power + playerUnit.attack; // Combinar ataque base + stat
+
+        // 1. Trigger the correct animation
+        Animator anim = playerUnit.GetComponent<Animator>();
+        if (anim != null)
+        {
+            if (selectedAttack.name == "Slash")
+            {
+                anim.SetInteger("attackType", 1);
+                anim.SetTrigger("attackTrigger");
+            }
+            else if (selectedAttack.name == "Fire")
+            {
+                anim.SetInteger("attackType", 2);
+                anim.SetTrigger("attackTrigger");
+            }
+        }
+
+        // 2. Wait a short time before applying damage
+        StartCoroutine(ExecuteAttackAfterDelay(selectedAttack, 0.5f));
+    }
+
+    IEnumerator ExecuteAttackAfterDelay(Attack selectedAttack, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        int totalPower = selectedAttack.power + playerUnit.attack;
         enemyUnit.TakeDamage(selectedAttack.power, selectedAttack.type);
         CheckBattleOutcome();
         isPlayerTurn = false;
         StartTurn();
     }
+
+
 
 
     void EnemyAttack()

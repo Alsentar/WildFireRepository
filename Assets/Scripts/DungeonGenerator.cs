@@ -64,7 +64,9 @@ public class DungeonGenerator : MonoBehaviour
         {
             Vector2Int startPos = GetSafeSpawnPosition();
             Debug.Log("Instanciando jugador en posición: " + startPos);
+
             
+
 
             CharacterData kasai = BattleLoader.Instance.GetCharacter("Kasai");
 
@@ -83,6 +85,13 @@ public class DungeonGenerator : MonoBehaviour
 
             GameObject player = Instantiate(kasaiPrefab, new Vector3(startPos.x, startPos.y, 0), Quaternion.identity);
             PlayerUnit playerUnit = player.GetComponent<PlayerUnit>();
+
+            Animator anim = player.GetComponent<Animator>();
+            if (anim != null)
+            {
+                anim.SetBool("inCombat", false);
+            }
+
 
             // Asignar datos desde CharacterData
             playerUnit.unitName = kasai.id;

@@ -72,7 +72,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -100,10 +100,10 @@ TextureImporter:
       name: Kasai Sword Attack_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 504
-        width: 500
-        height: 470
+        x: 8
+        y: 19
+        width: 35
+        height: 29
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -121,10 +121,10 @@ TextureImporter:
       name: Kasai Sword Attack_1
       rect:
         serializedVersion: 2
-        x: 500
-        y: 504
-        width: 500
-        height: 470
+        x: 43
+        y: 19
+        width: 35
+        height: 29
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -142,10 +142,10 @@ TextureImporter:
       name: Kasai Sword Attack_2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 34
-        width: 500
-        height: 470
+        x: 78
+        y: 19
+        width: 35
+        height: 29
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -163,10 +163,10 @@ TextureImporter:
       name: Kasai Sword Attack_3
       rect:
         serializedVersion: 2
-        x: 500
-        y: 34
-        width: 500
-        height: 470
+        x: 113
+        y: 19
+        width: 35
+        height: 29
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
