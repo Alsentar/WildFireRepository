@@ -23,10 +23,23 @@ public class ChestTrigger : MonoBehaviour
             PlayerUnit player = collision.GetComponent<PlayerUnit>();
             if (player != null)
             {
-                int healAmount = 30;
-                player.currentHP = Mathf.Min(player.maxHP, player.currentHP + healAmount);
+                CharacterData kasaiData = BattleLoader.Instance.GetCharacter("Kasai");
 
-                Debug.Log("El jugador se curó al abrir el cofre. HP actual: " + player.currentHP);
+                if (kasaiData != null)
+                {
+
+                    Debug.Log("Antes de curarse el jugador tenia una vida de: " + kasaiData.currentHP);
+                    int healAmount = 30;
+                    kasaiData.currentHP = Mathf.Min(kasaiData.maxHP, kasaiData.currentHP + healAmount);
+
+                    //actualizamos al jugador instanciado también
+                    player.currentHP = kasaiData.currentHP;
+
+                    Debug.Log("El jugador se curó al abrir el cofre. HP actual: " + player.currentHP);
+
+                }
+
+                
             }
 
             //Destroy(gameObject); // opcional
