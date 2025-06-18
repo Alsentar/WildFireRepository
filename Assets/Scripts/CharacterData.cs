@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class CharacterData
 {
-    public string id;               // Identificador único (ej: "Kasai", "Alsentar")
+    public string id;               // Identificador unico para cada personaje
     public string prefabName;      // Nombre del prefab en Resources
     public int level = 1;
     public int currentHP;

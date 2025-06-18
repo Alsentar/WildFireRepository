@@ -47,7 +47,7 @@ public class BattleLoader : MonoBehaviour
             CharacterData kasai = new CharacterData
             {
                 id = "Kasai",
-                prefabName = "Prefabs/KasaiPrefab",  // Usa el nombre exacto del prefab en la carpeta Resources
+                prefabName = "Prefabs/KasaiPrefab",  
                 level = 1,
                 maxHP = 100,
                 currentHP = 100,

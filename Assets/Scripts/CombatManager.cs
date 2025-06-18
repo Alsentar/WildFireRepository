@@ -176,7 +176,7 @@ public class CombatManager : MonoBehaviour
     {
         Debug.Log($"El jugador usó {selectedAttack.name}");
 
-        // 1. Trigger the correct animation
+        // Eleccion de ataque
         Animator anim = playerUnit.GetComponent<Animator>();
         if (anim != null)
         {
@@ -192,7 +192,7 @@ public class CombatManager : MonoBehaviour
             }
         }
 
-        // 2. Wait a short time before applying damage
+        // Esperamos que la animacion se reproduzca, y luego aplicamos dano
         StartCoroutine(ExecuteAttackAfterDelay(selectedAttack, 0.5f));
     }
 
