@@ -36,7 +36,11 @@ public class RestAreaGenerator : MonoBehaviour
         // Instanciar jugador en el centro de la sala
         Vector3 spawnPosition = new Vector3(width / 2f, height / 2f, 0f);
         GameObject player = Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
-        
+
+        //Punto de guardado
+        SaveSystem.SaveGame();
+
+
 
         if (cameraFollow != null)
         {

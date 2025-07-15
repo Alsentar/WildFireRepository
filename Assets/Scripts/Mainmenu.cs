@@ -12,17 +12,17 @@ public class MainMenu : MonoBehaviour
 
     public void LoadGame()
     {
-        
-        if (BattleLoader.Instance.savedMapData != null)
+        if (SaveSystem.SaveFileExists())
         {
-            SceneManager.LoadScene("WildFireBeta");
+            SaveSystem.LoadGame(); // Esto moverá al jugador a RestAreaOne
         }
         else
         {
-            Debug.LogWarning("No hay partida guardada.");
+            Debug.Log("No hay partida guardada.");
             
         }
     }
+
 
     public void QuitGame()
     {

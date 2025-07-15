@@ -12,8 +12,12 @@ public class BattleLoader : MonoBehaviour
 
     public string defeatedEnemyID;
     public SavedMapData savedMapData;
+    public int currentFloor = 1;
+    public int currentZone = 1;
 
-    
+
+
+
 
     public List<CharacterData> party = new List<CharacterData>();
 
