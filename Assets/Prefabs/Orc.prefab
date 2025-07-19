@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 5
-  m_Sprite: {fileID: 1547699317, guid: 8fdf8f400e650a243bd92e853081307d, type: 3}
+  m_Sprite: {fileID: -1992799515, guid: cd37370c510babe45aa4181a40b76ae7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -112,6 +112,12 @@ MonoBehaviour:
     power: 50
     type: 0
     manaCost: 0
+  level: 1
+  currentXP: 0
+  xpToNextLevel: 100
+  baseAttackGrowth: 2
+  baseDefenseGrowth: 1
+  baseSpeedGrowth: 2
 --- !u!114 &5540462389133374596
 MonoBehaviour:
   m_ObjectHideFlags: 0
