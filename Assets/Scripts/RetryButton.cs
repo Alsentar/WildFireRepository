@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class RetryButton : MonoBehaviour
 {
     public string sceneToLoad = "WildFireBeta";
+    public string mainMenuScene = "Mainmenu";
 
     public void RetryGame()
     {
@@ -32,5 +33,11 @@ public class RetryButton : MonoBehaviour
 
         SceneManager.LoadScene(sceneToLoad);
     }
+
+    public void GoToMainMenu()
+    {
+        SceneManager.LoadScene(mainMenuScene);
+    }
+
 
 }

@@ -39,7 +39,7 @@ public class CombatManager : MonoBehaviour
         }
 
 
-        Vector3 offscreenRight = Camera.main.ViewportToWorldPoint(new Vector3(1.2f, 0.46f, 0f));
+        Vector3 offscreenRight = Camera.main.ViewportToWorldPoint(new Vector3(1.2f, 0.40f, 0f));
         offscreenRight.z = 0f;
         GameObject playerObj = Instantiate(kasaiPrefab, offscreenRight, Quaternion.identity); // empieza fuera de pantalla
         playerUnit = playerObj.GetComponent<PlayerUnit>();

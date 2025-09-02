@@ -9,7 +9,8 @@ public class RestAreaGenerator : MonoBehaviour
 
     public GameObject floorPrefab;
     public GameObject wallPrefab;
-    public GameObject playerPrefab;      
+    public GameObject playerPrefab;
+    public GameObject restStairPrefab;
     public CameraFollow cameraFollow;
 
     
@@ -39,6 +40,13 @@ public class RestAreaGenerator : MonoBehaviour
 
         //Punto de guardado
         SaveSystem.SaveGame();
+
+        //Escalera
+        if (restStairPrefab != null)
+        {
+            Vector3 stairPos = new Vector3(width - 2, 1, -1f); // Cerca de la esquina inferior derecha
+            Instantiate(restStairPrefab, stairPos, Quaternion.identity);
+        }
 
 
 
