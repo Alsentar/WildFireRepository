@@ -1883,6 +1883,10 @@ MonoBehaviour:
   buttonContainer: {fileID: 1912610819}
   playerUnit: {fileID: 8252406730892853077, guid: 79e4b61745222a247a2481c166dbcfd8, type: 3}
   combatManager: {fileID: 1788115011}
+  fireButtonSprite: {fileID: 21300000, guid: d0107c0963c4f7943bebaf744c485aaa, type: 3}
+  iceButtonSprite: {fileID: 21300000, guid: 933fdb8e272a2f9478afd8176b18fed2, type: 3}
+  physicalButtonSprite: {fileID: 21300000, guid: 0efa29c30bb7c714da49c50ae5adff9c, type: 3}
+  holyButtonSprite: {fileID: 21300000, guid: 381f1d158fb8b6848b06e6cd67f1270f, type: 3}
 --- !u!4 &1940641987
 Transform:
   m_ObjectHideFlags: 0
