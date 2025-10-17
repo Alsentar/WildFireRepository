@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8708047651817145343
+--- !u!1 &6752708805585385445
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,40 +8,41 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8758847075302650061}
-  - component: {fileID: 329851262926312751}
-  - component: {fileID: 5737188992636302235}
-  - component: {fileID: -2002925980816480294}
-  - component: {fileID: -1749912591548552928}
+  - component: {fileID: 5032088204694219635}
+  - component: {fileID: 8206738354505223755}
+  - component: {fileID: 714720174683431051}
+  - component: {fileID: 2158240611057459269}
+  - component: {fileID: 8199943099384275335}
+  - component: {fileID: 4658557562773610994}
   m_Layer: 0
-  m_Name: EvilCrab
+  m_Name: Flameskull
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8758847075302650061
+--- !u!4 &5032088204694219635
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8708047651817145343}
+  m_GameObject: {fileID: 6752708805585385445}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 26.16, y: 28.64, z: 0.059878003}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &329851262926312751
+--- !u!212 &8206738354505223755
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8708047651817145343}
+  m_GameObject: {fileID: 6752708805585385445}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -76,24 +77,24 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 5
-  m_Sprite: {fileID: 572455683, guid: cd37370c510babe45aa4181a40b76ae7, type: 3}
+  m_Sprite: {fileID: -1182467894, guid: 1fb37a042dd65f84ba96cbf07f6065d4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.0625, y: 1.0625}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &5737188992636302235
+--- !u!61 &714720174683431051
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8708047651817145343}
+  m_GameObject: {fileID: 6752708805585385445}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -123,39 +124,65 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.0625, y: 1.0625}
-    newSize: {x: 1.0625, y: 1.0625}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.0625, y: 1.0625}
+  m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &-2002925980816480294
+--- !u!114 &2158240611057459269
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8708047651817145343}
+  m_GameObject: {fileID: 6752708805585385445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d38c108c2cda7624a90cac8eda69db21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyID: 
+--- !u!114 &8199943099384275335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6752708805585385445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab018d05c836ee74bbf5917ad4973396, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyPrefab: {fileID: 6752708805585385445}
+--- !u!114 &4658557562773610994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6752708805585385445}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9de515c64fdabb84cb10cb61c3bd4d35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitName: "Crustaceo Taca\xF1o"
-  maxHP: 300
-  currentHP: 300
-  attack: 45
+  unitName: Craneo Fantasma
+  maxHP: 50
+  currentHP: 50
+  attack: 100
   defense: 0
   speed: 0
-  weaknesses: 01000000
-  resistances: 00000000
+  weaknesses: 05000000
+  resistances: 01000000
   availableAttacks:
-  - name: Chorro
+  - name: Fireball
     power: 10
-    type: 2
+    type: 1
     manaCost: 0
   level: 1
   currentXP: 0
@@ -163,16 +190,3 @@ MonoBehaviour:
   baseAttackGrowth: 2
   baseDefenseGrowth: 1
   baseSpeedGrowth: 2
---- !u!114 &-1749912591548552928
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8708047651817145343}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d38c108c2cda7624a90cac8eda69db21, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyID: 

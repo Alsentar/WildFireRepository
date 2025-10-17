@@ -8,7 +8,7 @@ public enum TileType
     Floor
 }
 
-public class DungeonGenerator : MonoBehaviour
+public class DungeonGenerator : MonoBehaviour, IZoneGenerator
 {
     public int width = 50;
     public int height = 50;
@@ -18,7 +18,7 @@ public class DungeonGenerator : MonoBehaviour
 
     public GameObject floorPrefab;
     public GameObject wallPrefab;
-    public GameObject playerPrefab;
+    [SerializeField] public GameObject playerPrefab { get; private set; }
     public GameObject stairPrefab;
     public GameObject[] enemyPrefabs; // Lista de prefabs de enemigos
     public int enemiesPerLevel = 5;   // Cuántos enemigos generar por nivel

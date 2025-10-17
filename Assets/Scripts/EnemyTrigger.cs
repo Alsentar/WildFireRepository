@@ -1,44 +1,52 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 using UnityEngine.SceneManagement;
 
 public class EnemyTrigger : MonoBehaviour
 {
-    public GameObject enemyPrefab; // Asignado desde DungeonGenerator
-    
+    public GameObject enemyPrefab;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (!other.CompareTag("Player")) return;
+
+        // Guardar el prefab del enemigo
+        BattleLoader.Instance.enemyPrefab = enemyPrefab;
+
+        // Buscar cualquier generador activo que implemente IZoneGenerator
+        IZoneGenerator generator = FindObjectOfType<MonoBehaviour>() as IZoneGenerator;
+        foreach (var mono in FindObjectsOfType<MonoBehaviour>())
         {
-            // Guardar el prefab del enemigo
-            BattleLoader.Instance.enemyPrefab = enemyPrefab;
-
-            // Guardar el prefab del jugador desde DungeonGenerator
-            BattleLoader.Instance.playerPrefab = FindObjectOfType<DungeonGenerator>().playerPrefab;
-
-            EnemyIdentifier id = GetComponent<EnemyIdentifier>();
-            if (id != null)
+            if (mono is IZoneGenerator gen)
             {
-                BattleLoader.Instance.defeatedEnemyID = id.enemyID;
+                generator = gen;
+                break;
             }
-
-            FindObjectOfType<DungeonGenerator>().SaveCurrentMap();
-
-            PlayerUnit player = FindObjectOfType<PlayerUnit>();
-            if (player != null && BattleLoader.Instance != null)
-            {
-                //BattleLoader.Instance.playerCurrentHP = player.currentHP;
-            }
-
-            UnityEngine.SceneManagement.SceneManager.LoadScene("CombatTest");
         }
+
+        if (generator != null)
+        {
+            BattleLoader.Instance.playerPrefab = generator.playerPrefab;
+            generator.SaveCurrentMap();
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró ningún generador de zona que implemente IZoneGenerator.");
+        }
+
+        // Guardar ID del enemigo
+        EnemyIdentifier id = GetComponent<EnemyIdentifier>();
+        if (id != null)
+            BattleLoader.Instance.defeatedEnemyID = id.enemyID;
+
+        // Guardar HP del jugador si quieres
+        PlayerUnit player = FindObjectOfType<PlayerUnit>();
+        if (player != null)
+        {
+            // BattleLoader.Instance.playerCurrentHP = player.currentHP;
+        }
+
+        SceneManager.LoadScene("CombatTest");
     }
-
-
-
-
-
 }
