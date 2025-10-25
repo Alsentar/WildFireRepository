@@ -9,6 +9,9 @@ public class EnemyTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+
+        Debug.Log($"Colisión detectada con: {other.name}");
+
         if (!other.CompareTag("Player")) return;
 
         // Guardar el prefab del enemigo

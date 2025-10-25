@@ -22,7 +22,8 @@ public class ZoneTwoGenerator : MonoBehaviour, IZoneGenerator
     public GameObject rightWallPrefab;
     public GameObject bottomLeftCornerPrefab;
     public GameObject bottomRightCornerPrefab;
-    [SerializeField] public GameObject playerPrefab { get; private set; }
+    [SerializeField] private GameObject _playerPrefab;
+    public GameObject playerPrefab => _playerPrefab;
     public GameObject stairPrefab;
 
     private TileType[,] map;

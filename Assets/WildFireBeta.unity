@@ -158,7 +158,7 @@ MonoBehaviour:
   roomMaxSize: 10
   floorPrefab: {fileID: 4165485690647698683, guid: f84ab57ec2dbc1843adf51b43a8f9203, type: 3}
   wallPrefab: {fileID: 859787848012155569, guid: ae6cd3e5797263f4d9cccad2197ac279, type: 3}
-  playerPrefab: {fileID: 6621414760742700946, guid: 79e4b61745222a247a2481c166dbcfd8, type: 3}
+  _playerPrefab: {fileID: 6621414760742700946, guid: 79e4b61745222a247a2481c166dbcfd8, type: 3}
   stairPrefab: {fileID: 7675584203494680841, guid: 4ed97e24b236a934e870c629b9045de7, type: 3}
   enemyPrefabs:
   - {fileID: 2357820628460748980, guid: 8e13c5e3083a488448664782fe741e89, type: 3}

@@ -18,7 +18,8 @@ public class DungeonGenerator : MonoBehaviour, IZoneGenerator
 
     public GameObject floorPrefab;
     public GameObject wallPrefab;
-    [SerializeField] public GameObject playerPrefab { get; private set; }
+    [SerializeField] private GameObject _playerPrefab;
+    public GameObject playerPrefab => _playerPrefab;
     public GameObject stairPrefab;
     public GameObject[] enemyPrefabs; // Lista de prefabs de enemigos
     public int enemiesPerLevel = 5;   // Cuántos enemigos generar por nivel
