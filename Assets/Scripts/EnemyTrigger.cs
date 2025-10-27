@@ -15,7 +15,10 @@ public class EnemyTrigger : MonoBehaviour
         if (!other.CompareTag("Player")) return;
 
         // Guardar el prefab del enemigo
+        Debug.Log($"[EnemyTrigger] Asignando enemigo a BattleLoader: {enemyPrefab?.name ?? "NULL"} ({enemyPrefab?.GetInstanceID()})");
         BattleLoader.Instance.enemyPrefab = enemyPrefab;
+        Debug.Log($"[EnemyTrigger] Después de asignar -> BattleLoader.enemyPrefab: {BattleLoader.Instance.enemyPrefab?.name ?? "NULL"} ({BattleLoader.Instance.enemyPrefab?.GetInstanceID()})");
+
 
         // Buscar cualquier generador activo que implemente IZoneGenerator
         IZoneGenerator generator = FindObjectOfType<MonoBehaviour>() as IZoneGenerator;
@@ -49,6 +52,9 @@ public class EnemyTrigger : MonoBehaviour
         {
             // BattleLoader.Instance.playerCurrentHP = player.currentHP;
         }
+
+        Debug.Log($"[BattleLoader] Preparando combate con: Enemy={enemyPrefab?.name ?? "NULL"} ({enemyPrefab?.GetInstanceID()})");
+
 
         SceneManager.LoadScene("CombatTest");
     }

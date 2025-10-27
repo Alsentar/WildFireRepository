@@ -176,80 +176,107 @@ public class ZoneTwoGenerator : MonoBehaviour, IZoneGenerator
         Instantiate(stairPrefab, new Vector3(end.x * tileSpacing, end.y * tileSpacing, 0), Quaternion.identity);
     }
 
+    // ===============================
+    //  GENERACIÓN DE ENEMIGOS - ZONA 2
+    // ===============================
     void PlaceEnemies()
     {
+        // Verifica que existan prefabs de enemigos configurados
         if (enemyPrefabs == null || enemyPrefabs.Length == 0)
         {
-            Debug.LogWarning("No se asignaron prefabs de enemigos a ZoneTwoGenerator.");
+            Debug.LogWarning("[ZoneTwoGenerator] No se asignaron prefabs de enemigos.");
             return;
         }
 
-        List<Vector2Int> floorTiles = new List<Vector2Int>();
+        // -------------------------------
+        //  Recolectar posiciones válidas de tipo piso
+        // -------------------------------
+        List<Vector2Int> validPositions = new List<Vector2Int>();
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
                 if (map[x, y] == TileType.Floor)
-                    floorTiles.Add(new Vector2Int(x, y));
+                    validPositions.Add(new Vector2Int(x, y));
             }
         }
 
-        int spawned = 0;
-        while (spawned < enemyCount && floorTiles.Count > 0)
+        // -------------------------------
+        //  Generar enemigos según enemyCount
+        // -------------------------------
+        for (int i = 0; i < enemyCount; i++)
         {
-            int randomIndex = Random.Range(0, floorTiles.Count);
-            Vector2Int pos = floorTiles[randomIndex];
-            floorTiles.RemoveAt(randomIndex);
+            if (validPositions.Count == 0) break;
 
-            // Evita spawnear en tiles con lámparas
+            // Seleccionar una posición aleatoria del mapa
+            int index = Random.Range(0, validPositions.Count);
+            Vector2Int pos = validPositions[index];
+            validPositions.RemoveAt(index);
+
+            // Evitar spawnear enemigos sobre lámparas
             if (lampPositions.Contains(pos))
                 continue;
 
+            // Seleccionar un prefab aleatorio del arreglo de enemigos
+            int prefabIndex = Random.Range(0, enemyPrefabs.Length);
+            GameObject enemyToSpawn = enemyPrefabs[prefabIndex];
 
-            // Evita spawnear muy cerca del jugador
-            if (spawned == 0 && Vector2.Distance(new Vector2(pos.x, pos.y), new Vector2(width / 2, height / 2)) < 4)
-                continue;
+            // Instanciar el enemigo en el mundo (respetando tileSpacing)
+            GameObject enemyInstance = Instantiate(
+                enemyToSpawn,
+                new Vector3(pos.x * tileSpacing, pos.y * tileSpacing, 0),
+                Quaternion.identity
+            );
 
-            GameObject prefab = enemyPrefabs[Random.Range(0, enemyPrefabs.Length)];
-            GameObject enemy = Instantiate(prefab, new Vector3(pos.x * tileSpacing, pos.y * tileSpacing, 0), Quaternion.identity);
-            enemy.transform.localScale = new Vector3(1.5f, 1.5f, 1f);
+            // Ajustar su escala para mantener coherencia visual
+            enemyInstance.transform.localScale = new Vector3(1.5f, 1.5f, 1f);
 
+            // -------------------------------
+            //  Asignar identificador único (EnemyIdentifier)
+            // -------------------------------
+            EnemyIdentifier identifier = enemyInstance.GetComponent<EnemyIdentifier>();
+            if (identifier == null)
+                identifier = enemyInstance.AddComponent<EnemyIdentifier>();
 
-            var id = enemy.GetComponent<EnemyIdentifier>();
-            if (id == null) id = enemy.AddComponent<EnemyIdentifier>();
-            if (BattleLoader.Instance != null && BattleLoader.Instance.eliminatedEnemies.Contains(id.enemyID))
+            // Si el enemigo ya fue derrotado antes, evitar reaparición
+            if (BattleLoader.Instance != null && BattleLoader.Instance.eliminatedEnemies.Contains(identifier.enemyID))
             {
-                Destroy(enemy);
+                Debug.Log($"[ZoneTwoGenerator] Evitando reaparición del enemigo eliminado: {identifier.enemyID}");
+                Destroy(enemyInstance);
+                i--; // Reintentar con otro enemigo
                 continue;
             }
 
-            var col = enemy.GetComponent<Collider2D>();
+            // -------------------------------
+            //  Asegurar colisión y trigger
+            // -------------------------------
+            Collider2D col = enemyInstance.GetComponent<Collider2D>();
             if (col == null)
-            {
-                col = enemy.AddComponent<BoxCollider2D>();
-                col.isTrigger = true;
-            }
+                col = enemyInstance.AddComponent<BoxCollider2D>();
+            col.isTrigger = true;
 
-            if (enemy.GetComponent<EnemyTrigger>() == null)
-            {
-                var trig = enemy.AddComponent<EnemyTrigger>();
-                trig.enemyPrefab = prefab;
-            }
+            // -------------------------------
+            //  Asignar EnemyTrigger dinámicamente (igual que en Nivel 1)
+            // -------------------------------
+            EnemyTrigger trigger = enemyInstance.AddComponent<EnemyTrigger>();
+            trigger.enemyPrefab = enemyToSpawn; // Prefab original del Project
 
-            var stats = enemy.GetComponent<CombatUnit>();
-            if (stats != null)
+            // -------------------------------
+            //  Ajustar estadísticas (Zona 2 = enemigos más fuertes)
+            // -------------------------------
+            CombatUnit cu = enemyInstance.GetComponent<CombatUnit>();
+            if (cu != null)
             {
-                stats.level += 2;
-                stats.attack += 3;
-                stats.defense += 2;
-                stats.speed += 1;
+                cu.level += 2;
+                cu.attack += 3;
+                cu.defense += 2;
+                cu.speed += 1;
             }
-
-            spawned++;
         }
 
-        Debug.Log($"Generados {spawned} enemigos en Zona 2.");
+        Debug.Log($"[ZoneTwoGenerator] Generados {enemyCount} enemigos en Zona 2.");
     }
+
 
     public void SaveCurrentMap()
     {

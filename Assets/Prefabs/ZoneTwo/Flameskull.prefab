@@ -11,9 +11,6 @@ GameObject:
   - component: {fileID: 5032088204694219635}
   - component: {fileID: 8206738354505223755}
   - component: {fileID: 714720174683431051}
-  - component: {fileID: 2158240611057459269}
-  - component: {fileID: 8199943099384275335}
-  - component: {fileID: 4658557562773610994}
   m_Layer: 0
   m_Name: Flameskull
   m_TagString: Untagged
@@ -133,60 +130,3 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &2158240611057459269
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6752708805585385445}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d38c108c2cda7624a90cac8eda69db21, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyID: 
---- !u!114 &8199943099384275335
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6752708805585385445}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab018d05c836ee74bbf5917ad4973396, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 6752708805585385445}
---- !u!114 &4658557562773610994
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6752708805585385445}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9de515c64fdabb84cb10cb61c3bd4d35, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  unitName: Craneo Fantasma
-  maxHP: 50
-  currentHP: 50
-  attack: 100
-  defense: 0
-  speed: 0
-  weaknesses: 05000000
-  resistances: 01000000
-  availableAttacks:
-  - name: Fireball
-    power: 10
-    type: 1
-    manaCost: 0
-  level: 1
-  currentXP: 0
-  xpToNextLevel: 100
-  baseAttackGrowth: 2
-  baseDefenseGrowth: 1
-  baseSpeedGrowth: 2

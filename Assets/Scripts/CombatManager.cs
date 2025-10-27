@@ -16,6 +16,13 @@ public class CombatManager : MonoBehaviour
 
     void Start()
     {
+
+        Debug.Log(
+        $"[CombatManager] Revisando prefabs -> Player: {(BattleLoader.Instance.playerPrefab ? BattleLoader.Instance.playerPrefab.name : "NULL")}, " +
+        $"Enemy: {(BattleLoader.Instance.enemyPrefab ? BattleLoader.Instance.enemyPrefab.name : "NULL")}"
+        );
+
+
         if (BattleLoader.Instance.enemyPrefab == null || BattleLoader.Instance.playerPrefab == null)
         {
             Debug.LogError("Prefabs no definidos en BattleLoader.");

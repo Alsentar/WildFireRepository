@@ -321,7 +321,6 @@ MonoBehaviour:
   _playerPrefab: {fileID: 6621414760742700946, guid: 79e4b61745222a247a2481c166dbcfd8, type: 3}
   stairPrefab: {fileID: 6693408460608585337, guid: 80027605f93d3b04ab8b79c29827fad5, type: 3}
   enemyPrefabs:
-  - {fileID: 6752708805585385445, guid: 3ad67074dc8af934b8db9fe593426421, type: 3}
   - {fileID: 1588065439782554354, guid: 7ef693044a716164fbe213a0b871b755, type: 3}
   - {fileID: 5428254414403922696, guid: 9c2840999a09c324582bc8daacf80c92, type: 3}
   enemyCount: 6
