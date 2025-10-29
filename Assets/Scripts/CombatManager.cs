@@ -280,7 +280,10 @@ public class CombatManager : MonoBehaviour
 
             Debug.Log("Guardando vida actual del jugador: " + playerUnit.currentHP);
 
-            SceneManager.LoadScene("WildFireBeta");
+            string targetScene = BattleLoader.Instance.currentZone == 2 ? "ZoneTwo" : "WildFireBeta";
+            Debug.Log($"[CombatManager] Retornando a la escena: {targetScene}");
+            SceneManager.LoadScene(targetScene);
+
         }
     }
 

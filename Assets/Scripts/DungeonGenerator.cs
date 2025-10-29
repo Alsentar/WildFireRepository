@@ -40,6 +40,8 @@ public class DungeonGenerator : MonoBehaviour, IZoneGenerator
 
     IEnumerator Start()
     {
+
+        BattleLoader.Instance.currentZone = 1;
         // Espera un frame para que BattleLoader se inicialice por completo
         while (BattleLoader.Instance == null)
         {

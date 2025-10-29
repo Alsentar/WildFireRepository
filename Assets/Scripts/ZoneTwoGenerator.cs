@@ -10,7 +10,6 @@ public class ZoneTwoGenerator : MonoBehaviour, IZoneGenerator
     public int roomWidth = 8;
     public int roomHeight = 6;
 
-    
     public float tileSpacing = 0.5f;
 
     [Header("Tiles y prefabs")]
@@ -26,10 +25,9 @@ public class ZoneTwoGenerator : MonoBehaviour, IZoneGenerator
     public GameObject playerPrefab => _playerPrefab;
     public GameObject stairPrefab;
 
-    private TileType[,] map;
+    private Zone2TileType[,] map;
     private List<Vector2Int> roomCenters = new List<Vector2Int>();
     private List<Vector2Int> lampPositions = new List<Vector2Int>();
-
 
     [Header("Enemigos")]
     [SerializeField] private GameObject[] enemyPrefabs;  // Flameskull, Zombie, Esqueleto
@@ -37,6 +35,17 @@ public class ZoneTwoGenerator : MonoBehaviour, IZoneGenerator
 
     void Start()
     {
+        BattleLoader.Instance.currentZone = 2;
+
+        if (BattleLoader.Instance != null && BattleLoader.Instance.savedMapData != null)
+        {
+            Debug.Log("[ZoneTwoGenerator] Restaurando mapa guardado...");
+            RestoreSavedMap(BattleLoader.Instance.savedMapData);
+            BattleLoader.Instance.savedMapData = null;
+            return;
+        }
+
+        // Si no hay mapa guardado, generar nuevo
         GenerateMap();
         RenderMap();
         PlacePlayer();
@@ -46,12 +55,12 @@ public class ZoneTwoGenerator : MonoBehaviour, IZoneGenerator
 
     void GenerateMap()
     {
-        map = new TileType[width, height];
+        map = new Zone2TileType[width, height];
 
         // Rellenar todo con paredes
         for (int x = 0; x < width; x++)
             for (int y = 0; y < height; y++)
-                map[x, y] = TileType.Wall;
+                map[x, y] = Zone2TileType.Wall;
 
         // Generar habitaciones rectangulares conectadas
         for (int i = 0; i < roomCount; i++)
@@ -65,7 +74,7 @@ public class ZoneTwoGenerator : MonoBehaviour, IZoneGenerator
             {
                 for (int y = ry; y < ry + roomHeight; y++)
                 {
-                    map[x, y] = TileType.Floor;
+                    map[x, y] = Zone2TileType.Floor;
                 }
             }
 
@@ -80,13 +89,13 @@ public class ZoneTwoGenerator : MonoBehaviour, IZoneGenerator
 
         while (x != b.x)
         {
-            map[x, y] = TileType.Floor;
+            map[x, y] = Zone2TileType.Floor;
             x += x < b.x ? 1 : -1;
         }
 
         while (y != b.y)
         {
-            map[x, y] = TileType.Floor;
+            map[x, y] = Zone2TileType.Floor;
             y += y < b.y ? 1 : -1;
         }
     }
@@ -97,19 +106,17 @@ public class ZoneTwoGenerator : MonoBehaviour, IZoneGenerator
         {
             for (int y = 0; y < height; y++)
             {
-                if (map[x, y] == TileType.Floor)
+                if (map[x, y] == Zone2TileType.Floor)
                 {
-                    GameObject floor = Random.value < 0.02f ? lampFloorPrefab : floorPrefab;
                     if (Random.value < 0.02f)
                     {
                         Instantiate(lampFloorPrefab, new Vector3(x * tileSpacing, y * tileSpacing, 0), Quaternion.identity);
-                        lampPositions.Add(new Vector2Int(x, y));  // Registrar posición
+                        lampPositions.Add(new Vector2Int(x, y));
                     }
                     else
                     {
                         Instantiate(floorPrefab, new Vector3(x * tileSpacing, y * tileSpacing, 0), Quaternion.identity);
                     }
-
                 }
                 else
                 {
@@ -151,7 +158,7 @@ public class ZoneTwoGenerator : MonoBehaviour, IZoneGenerator
 
     bool IsFloor(int x, int y)
     {
-        return IsInsideMap(x, y) && map[x, y] == TileType.Floor;
+        return IsInsideMap(x, y) && map[x, y] == Zone2TileType.Floor;
     }
 
     bool IsInsideMap(int x, int y)
@@ -177,115 +184,131 @@ public class ZoneTwoGenerator : MonoBehaviour, IZoneGenerator
     }
 
     // ===============================
-    //  GENERACIÓN DE ENEMIGOS - ZONA 2
+    //  GUARDAR MAPA COMPLETO (ZONA 2)
     // ===============================
-    void PlaceEnemies()
+    public void SaveCurrentMap()
     {
-        // Verifica que existan prefabs de enemigos configurados
-        if (enemyPrefabs == null || enemyPrefabs.Length == 0)
-        {
-            Debug.LogWarning("[ZoneTwoGenerator] No se asignaron prefabs de enemigos.");
-            return;
-        }
+        if (BattleLoader.Instance == null) return;
+        Debug.Log("[ZoneTwoGenerator] Guardando mapa completo...");
 
-        // -------------------------------
-        //  Recolectar posiciones válidas de tipo piso
-        // -------------------------------
-        List<Vector2Int> validPositions = new List<Vector2Int>();
+        SavedMapData data = new SavedMapData();
+        data.width = width;
+        data.height = height;
+        data.tileTypes = new TileType[width * height]; // Usamos el TileType GLOBAL
+
+        // Guardar cada celda del mapa
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                if (map[x, y] == TileType.Floor)
-                    validPositions.Add(new Vector2Int(x, y));
+                data.tileTypes[y * width + x] = (TileType)map[x, y]; // conversión explícita
             }
         }
 
-        // -------------------------------
-        //  Generar enemigos según enemyCount
-        // -------------------------------
-        for (int i = 0; i < enemyCount; i++)
+        // Guardar enemigos actuales
+        foreach (var enemy in FindObjectsOfType<EnemyIdentifier>())
         {
-            if (validPositions.Count == 0) break;
-
-            // Seleccionar una posición aleatoria del mapa
-            int index = Random.Range(0, validPositions.Count);
-            Vector2Int pos = validPositions[index];
-            validPositions.RemoveAt(index);
-
-            // Evitar spawnear enemigos sobre lámparas
-            if (lampPositions.Contains(pos))
-                continue;
-
-            // Seleccionar un prefab aleatorio del arreglo de enemigos
-            int prefabIndex = Random.Range(0, enemyPrefabs.Length);
-            GameObject enemyToSpawn = enemyPrefabs[prefabIndex];
-
-            // Instanciar el enemigo en el mundo (respetando tileSpacing)
-            GameObject enemyInstance = Instantiate(
-                enemyToSpawn,
-                new Vector3(pos.x * tileSpacing, pos.y * tileSpacing, 0),
-                Quaternion.identity
-            );
-
-            // Ajustar su escala para mantener coherencia visual
-            enemyInstance.transform.localScale = new Vector3(1.5f, 1.5f, 1f);
-
-            // -------------------------------
-            //  Asignar identificador único (EnemyIdentifier)
-            // -------------------------------
-            EnemyIdentifier identifier = enemyInstance.GetComponent<EnemyIdentifier>();
-            if (identifier == null)
-                identifier = enemyInstance.AddComponent<EnemyIdentifier>();
-
-            // Si el enemigo ya fue derrotado antes, evitar reaparición
-            if (BattleLoader.Instance != null && BattleLoader.Instance.eliminatedEnemies.Contains(identifier.enemyID))
+            Vector2Int pos = Vector2Int.RoundToInt(enemy.transform.position / tileSpacing);
+            data.enemies.Add(new SavedEnemy
             {
-                Debug.Log($"[ZoneTwoGenerator] Evitando reaparición del enemigo eliminado: {identifier.enemyID}");
-                Destroy(enemyInstance);
-                i--; // Reintentar con otro enemigo
-                continue;
-            }
+                prefabName = enemy.gameObject.name.Replace("(Clone)", "").Trim(),
+                position = pos,
+                enemyID = enemy.enemyID
+            });
+        }
 
-            // -------------------------------
-            //  Asegurar colisión y trigger
-            // -------------------------------
-            Collider2D col = enemyInstance.GetComponent<Collider2D>();
-            if (col == null)
-                col = enemyInstance.AddComponent<BoxCollider2D>();
+        // Guardar cofres
+        foreach (var chest in GameObject.FindGameObjectsWithTag("Chest"))
+        {
+            Vector2Int pos = Vector2Int.RoundToInt(chest.transform.position / tileSpacing);
+            data.chestPositions.Add(pos);
+        }
+
+        // Guardar posición del jugador
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+            data.playerPosition = Vector2Int.RoundToInt(player.transform.position / tileSpacing);
+
+        // Guardar posición de las escaleras
+        GameObject stairs = GameObject.FindGameObjectWithTag("Stairs");
+        if (stairs != null)
+            data.stairPosition = Vector2Int.RoundToInt(stairs.transform.position / tileSpacing);
+
+        BattleLoader.Instance.savedMapData = data;
+    }
+
+    // ===============================
+    //  RESTAURAR MAPA GUARDADO (ZONA 2)
+    // ===============================
+    void RestoreSavedMap(SavedMapData data)
+    {
+        Debug.Log("[ZoneTwoGenerator] Restaurando mapa guardado (layout completo)...");
+
+        width = data.width;
+        height = data.height;
+        map = new Zone2TileType[width, height];
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                map[x, y] = (Zone2TileType)data.tileTypes[y * width + x];
+            }
+        }
+
+        RenderMap();
+
+        Instantiate(stairPrefab, new Vector3(data.stairPosition.x * tileSpacing, data.stairPosition.y * tileSpacing, 0), Quaternion.identity);
+
+        foreach (var pos in data.chestPositions)
+        {
+            Instantiate(floorPrefab, new Vector3(pos.x * tileSpacing, pos.y * tileSpacing, 0), Quaternion.identity);
+        }
+
+        foreach (var enemyData in data.enemies)
+        {
+            if (BattleLoader.Instance.eliminatedEnemies.Contains(enemyData.enemyID))
+                continue;
+
+            GameObject prefab = FindEnemyPrefabByName(enemyData.prefabName);
+            if (prefab == null)
+                continue;
+
+            GameObject enemy = Instantiate(prefab, new Vector3(enemyData.position.x * tileSpacing, enemyData.position.y * tileSpacing, 0), Quaternion.identity);
+            EnemyIdentifier id = enemy.GetComponent<EnemyIdentifier>() ?? enemy.AddComponent<EnemyIdentifier>();
+            id.enemyID = enemyData.enemyID;
+
+            Collider2D col = enemy.GetComponent<Collider2D>() ?? enemy.AddComponent<BoxCollider2D>();
             col.isTrigger = true;
 
-            // -------------------------------
-            //  Asignar EnemyTrigger dinámicamente (igual que en Nivel 1)
-            // -------------------------------
-            EnemyTrigger trigger = enemyInstance.AddComponent<EnemyTrigger>();
-            trigger.enemyPrefab = enemyToSpawn; // Prefab original del Project
+            EnemyTrigger trigger = enemy.AddComponent<EnemyTrigger>();
+            trigger.enemyPrefab = prefab;
+        }
 
-            // -------------------------------
-            //  Ajustar estadísticas (Zona 2 = enemigos más fuertes)
-            // -------------------------------
-            CombatUnit cu = enemyInstance.GetComponent<CombatUnit>();
-            if (cu != null)
+        GameObject player = Instantiate(playerPrefab, new Vector3(data.playerPosition.x * tileSpacing, data.playerPosition.y * tileSpacing, 0), Quaternion.identity);
+        CameraFollow cam = FindObjectOfType<CameraFollow>();
+        if (cam != null)
+            cam.target = player.transform;
+    }
+
+    GameObject FindEnemyPrefabByName(string name)
+    {
+        foreach (GameObject prefab in enemyPrefabs)
+        {
+            if (prefab != null && prefab.name == name)
             {
-                cu.level += 2;
-                cu.attack += 3;
-                cu.defense += 2;
-                cu.speed += 1;
+                return prefab;
             }
         }
 
-        Debug.Log($"[ZoneTwoGenerator] Generados {enemyCount} enemigos en Zona 2.");
+        Debug.LogWarning($"[ZoneTwoGenerator] No se encontró ningún prefab que coincida con el nombre: {name}");
+        return null;
     }
 
-
-    public void SaveCurrentMap()
-    {
-        // De momento, esta zona no guarda datos del mapa,
-        // pero el método se deja vacío para cumplir con la interfaz.
-    }
-
-
-    public enum TileType
+    // ===============================
+    //  ENUM LOCAL PARA ZONA 2
+    // ===============================
+    public enum Zone2TileType
     {
         Wall,
         Floor

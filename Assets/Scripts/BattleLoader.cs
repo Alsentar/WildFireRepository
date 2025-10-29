@@ -44,14 +44,18 @@ public class BattleLoader : MonoBehaviour
         else
         {
             Destroy(gameObject);
+            return;
         }
 
+        //  Si no tiene datos (por ejemplo, entramos directo a ZoneTwo)
         if (party.Count == 0)
         {
+            Debug.Log("[BattleLoader] Inicializando datos por defecto para test directo.");
+
             CharacterData kasai = new CharacterData
             {
                 id = "Kasai",
-                prefabName = "Prefabs/KasaiPrefab",  
+                prefabName = "Prefabs/KasaiPrefab",
                 level = 1,
                 maxHP = 100,
                 currentHP = 100,
@@ -67,7 +71,6 @@ public class BattleLoader : MonoBehaviour
 
             party.Add(kasai);
         }
-
-
     }
+
 }
