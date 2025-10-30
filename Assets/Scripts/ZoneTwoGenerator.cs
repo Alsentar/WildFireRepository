@@ -177,6 +177,108 @@ public class ZoneTwoGenerator : MonoBehaviour, IZoneGenerator
             cam.target = player.transform;
     }
 
+    // ===============================
+    //  GENERACIÓN DE ENEMIGOS - ZONA 2
+    // ===============================
+    void PlaceEnemies()
+    {
+        // Verifica que existan prefabs de enemigos configurados
+        if (enemyPrefabs == null || enemyPrefabs.Length == 0)
+        {
+            Debug.LogWarning("[ZoneTwoGenerator] No se asignaron prefabs de enemigos.");
+            return;
+        }
+
+        // -------------------------------
+        //  Recolectar posiciones válidas de tipo piso
+        // -------------------------------
+        List<Vector2Int> validPositions = new List<Vector2Int>();
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (map[x, y] == Zone2TileType.Floor)
+                    validPositions.Add(new Vector2Int(x, y));
+            }
+        }
+
+        // -------------------------------
+        //  Generar enemigos según enemyCount
+        // -------------------------------
+        for (int i = 0; i < enemyCount; i++)
+        {
+            if (validPositions.Count == 0) break;
+
+            // Seleccionar una posición aleatoria del mapa
+            int index = Random.Range(0, validPositions.Count);
+            Vector2Int pos = validPositions[index];
+            validPositions.RemoveAt(index);
+
+            // Evitar spawnear enemigos sobre lámparas
+            if (lampPositions.Contains(pos))
+                continue;
+
+            // Seleccionar un prefab aleatorio del arreglo de enemigos
+            int prefabIndex = Random.Range(0, enemyPrefabs.Length);
+            GameObject enemyToSpawn = enemyPrefabs[prefabIndex];
+
+            // Instanciar el enemigo en el mundo (respetando tileSpacing)
+            GameObject enemyInstance = Instantiate(
+                enemyToSpawn,
+                new Vector3(pos.x * tileSpacing, pos.y * tileSpacing, 0),
+                Quaternion.identity
+            );
+
+            // Ajustar su escala para mantener coherencia visual
+            enemyInstance.transform.localScale = new Vector3(1.5f, 1.5f, 1f);
+
+            // -------------------------------
+            //  Asignar identificador único (EnemyIdentifier)
+            // -------------------------------
+            EnemyIdentifier identifier = enemyInstance.GetComponent<EnemyIdentifier>();
+            if (identifier == null)
+                identifier = enemyInstance.AddComponent<EnemyIdentifier>();
+
+            // Si el enemigo ya fue derrotado antes, evitar reaparición
+            if (BattleLoader.Instance != null && BattleLoader.Instance.eliminatedEnemies.Contains(identifier.enemyID))
+            {
+                Debug.Log($"[ZoneTwoGenerator] Evitando reaparición del enemigo eliminado: {identifier.enemyID}");
+                Destroy(enemyInstance);
+                i--; // Reintentar con otro enemigo
+                continue;
+            }
+
+            // -------------------------------
+            //  Asegurar colisión y trigger
+            // -------------------------------
+            Collider2D col = enemyInstance.GetComponent<Collider2D>();
+            if (col == null)
+                col = enemyInstance.AddComponent<BoxCollider2D>();
+            col.isTrigger = true;
+
+            // -------------------------------
+            //  Asignar EnemyTrigger dinámicamente (igual que en Nivel 1)
+            // -------------------------------
+            EnemyTrigger trigger = enemyInstance.AddComponent<EnemyTrigger>();
+            trigger.enemyPrefab = enemyToSpawn; // Prefab original del Project
+
+            // -------------------------------
+            //  Ajustar estadísticas (Zona 2 = enemigos más fuertes)
+            // -------------------------------
+            CombatUnit cu = enemyInstance.GetComponent<CombatUnit>();
+            if (cu != null)
+            {
+                cu.level += 2;
+                cu.attack += 3;
+                cu.defense += 2;
+                cu.speed += 1;
+            }
+        }
+
+        Debug.Log($"[ZoneTwoGenerator] Generados {enemyCount} enemigos en Zona 2.");
+    }
+
+
     void PlaceStairs()
     {
         Vector2Int end = roomCenters[roomCenters.Count - 1];
@@ -286,9 +388,17 @@ public class ZoneTwoGenerator : MonoBehaviour, IZoneGenerator
         }
 
         GameObject player = Instantiate(playerPrefab, new Vector3(data.playerPosition.x * tileSpacing, data.playerPosition.y * tileSpacing, 0), Quaternion.identity);
+
+        //  Normalizar escala para que coincida con el jugador original
+        player.transform.localScale = Vector3.one;
+
+        //  Para que se vea mas grande:
+        // player.transform.localScale = new Vector3(1.5f, 1.5f, 1f);
+
         CameraFollow cam = FindObjectOfType<CameraFollow>();
         if (cam != null)
             cam.target = player.transform;
+
     }
 
     GameObject FindEnemyPrefabByName(string name)
