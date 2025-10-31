@@ -377,8 +377,13 @@ public class ZoneTwoGenerator : MonoBehaviour, IZoneGenerator
                 continue;
 
             GameObject enemy = Instantiate(prefab, new Vector3(enemyData.position.x * tileSpacing, enemyData.position.y * tileSpacing, 0), Quaternion.identity);
+
+            //  Normalizar escala visual igual que en PlaceEnemies()
+            enemy.transform.localScale = new Vector3(1.5f, 1.5f, 1f);
+
             EnemyIdentifier id = enemy.GetComponent<EnemyIdentifier>() ?? enemy.AddComponent<EnemyIdentifier>();
             id.enemyID = enemyData.enemyID;
+
 
             Collider2D col = enemy.GetComponent<Collider2D>() ?? enemy.AddComponent<BoxCollider2D>();
             col.isTrigger = true;
