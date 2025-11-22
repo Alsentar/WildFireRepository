@@ -191,11 +191,21 @@ public class CombatManager : MonoBehaviour
             {
                 anim.SetInteger("attackType", 1);
                 anim.SetTrigger("attackTrigger");
+
+                if (AudioManager.Instance != null)
+                {
+                    AudioManager.Instance.PlaySFX(AudioManager.Instance.swordAttackSFX, 0.9f);
+                }
             }
             else if (selectedAttack.name == "Fire")
             {
                 anim.SetInteger("attackType", 2);
                 anim.SetTrigger("attackTrigger");
+
+                if (AudioManager.Instance != null)
+                {
+                    AudioManager.Instance.PlaySFX(AudioManager.Instance.fireAttackSFX, 0.9f);
+                }
             }
         }
 

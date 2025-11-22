@@ -20,6 +20,12 @@ public class ChestTrigger : MonoBehaviour
             animator.SetTrigger("Open");
             isOpened = true;
 
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlaySFX(AudioManager.Instance.openChestSFX, 0.8f);
+            }
+
+
             PlayerUnit player = collision.GetComponent<PlayerUnit>();
             if (player != null)
             {

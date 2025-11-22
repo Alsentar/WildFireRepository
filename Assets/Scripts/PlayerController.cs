@@ -16,6 +16,12 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer mySpriteRender;
     private Vector2 lastDirection = Vector2.down; // Por defecto, mirando hacia abajo
 
+    private float footstepTimer = 0f;
+    public float footstepInterval = 0.3f; // ajustable
+
+
+
+
 
     private void Awake()
     {
@@ -33,6 +39,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         PlayerInput();
+        HandleFootsteps();
     }
 
     private void FixedUpdate()
@@ -67,6 +74,28 @@ public class PlayerController : MonoBehaviour
         myAnimator.SetBool("isMoving", movement != Vector2.zero);
     }
 
+    private void HandleFootsteps()
+    {
+        // No sonar pasos si el jugador no tiene control manual (por ejemplo, en combate)
+        if (!allowManualControl) return;
+
+        if (movement != Vector2.zero)
+        {
+            footstepTimer += Time.deltaTime;
+            if (footstepTimer >= footstepInterval)
+            {
+                if (AudioManager.Instance != null && AudioManager.Instance.footStepsSFX != null)
+                {
+                    AudioManager.Instance.PlaySFX(AudioManager.Instance.footStepsSFX, 0.4f);
+                }
+                footstepTimer = 0f;
+            }
+        }
+        else
+        {
+            footstepTimer = 0f;
+        }
+    }
 
 
 
