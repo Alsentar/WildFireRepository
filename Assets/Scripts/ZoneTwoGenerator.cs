@@ -24,6 +24,9 @@ public class ZoneTwoGenerator : MonoBehaviour, IZoneGenerator
     [SerializeField] private GameObject _playerPrefab;
     public GameObject playerPrefab => _playerPrefab;
     public GameObject stairPrefab;
+    public GameObject chestPrefab;         // Prefab del cofre
+    public int minChests = 1;              // Cantidad mínima de cofres por mapa
+    public int maxChests = 2;              // Cantidad máxima de cofres por mapa
 
     private Zone2TileType[,] map;
     private List<Vector2Int> roomCenters = new List<Vector2Int>();
@@ -32,6 +35,8 @@ public class ZoneTwoGenerator : MonoBehaviour, IZoneGenerator
     [Header("Enemigos")]
     [SerializeField] private GameObject[] enemyPrefabs;  // Flameskull, Zombie, Esqueleto
     [SerializeField] private int enemyCount = 6;         // Número de enemigos por mapa
+
+    private List<Rect> rooms = new List<Rect>();
 
     void Start()
     {
@@ -51,6 +56,7 @@ public class ZoneTwoGenerator : MonoBehaviour, IZoneGenerator
         PlacePlayer();
         PlaceEnemies();
         PlaceStairs();
+        PlaceChests();
     }
 
     void GenerateMap()
@@ -278,12 +284,72 @@ public class ZoneTwoGenerator : MonoBehaviour, IZoneGenerator
         Debug.Log($"[ZoneTwoGenerator] Generados {enemyCount} enemigos en Zona 2.");
     }
 
+    
 
     void PlaceStairs()
     {
-        Vector2Int end = roomCenters[roomCenters.Count - 1];
-        Instantiate(stairPrefab, new Vector3(end.x * tileSpacing, end.y * tileSpacing, 0), Quaternion.identity);
+        List<Vector2Int> validStairPositions = new List<Vector2Int>();
+
+        // Recolectar todas las celdas que son piso
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (map[x, y] == Zone2TileType.Floor)
+                {
+                    validStairPositions.Add(new Vector2Int(x, y));
+                }
+            }
+        }
+
+        if (validStairPositions.Count == 0)
+        {
+            Debug.LogError("No se encontraron celdas válidas para colocar escaleras en Zona 2.");
+            return;
+        }
+
+        // Elegir una celda de piso aleatoria
+        Vector2Int pos = validStairPositions[Random.Range(0, validStairPositions.Count)];
+
+        // Convertir a coordenadas del mundo (Zona 2 usa tileSpacing)
+        Vector3 worldPos = new Vector3(pos.x * tileSpacing, pos.y * tileSpacing, 0);
+
+        Instantiate(stairPrefab, worldPos, Quaternion.identity);
     }
+
+    void PlaceChests()
+    {
+        List<Vector2Int> validPositions = new List<Vector2Int>();
+
+        // Recolectar todas las celdas de tipo piso
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (map[x, y] == Zone2TileType.Floor)
+                {
+                    validPositions.Add(new Vector2Int(x, y));
+                }
+            }
+        }
+
+        // Decidir aleatoriamente cuántos cofres colocar
+        int chestCount = Random.Range(minChests, maxChests + 1);
+
+        for (int i = 0; i < chestCount; i++)
+        {
+            if (validPositions.Count == 0) break;
+
+            // Elegir posición aleatoria y eliminarla para evitar repeticiones
+            int index = Random.Range(0, validPositions.Count);
+            Vector2Int pos = validPositions[index];
+            validPositions.RemoveAt(index);
+
+            Instantiate(chestPrefab, new Vector3(pos.x * tileSpacing, pos.y * tileSpacing, 0), Quaternion.identity);
+
+        }
+    }
+
 
     // ===============================
     //  GUARDAR MAPA COMPLETO (ZONA 2)
@@ -360,12 +426,27 @@ public class ZoneTwoGenerator : MonoBehaviour, IZoneGenerator
 
         RenderMap();
 
-        Instantiate(stairPrefab, new Vector3(data.stairPosition.x * tileSpacing, data.stairPosition.y * tileSpacing, 0), Quaternion.identity);
+        // Validar que la escalera esté en un tile de piso
+        Vector2Int restored = data.stairPosition;
+
+        if (!IsInsideMap(restored.x, restored.y) || map[restored.x, restored.y] != Zone2TileType.Floor)
+        {
+            Debug.LogWarning("[ZoneTwoGenerator] Stair was saved in invalid position, searching closest floor...");
+            restored = FindNearestValidFloor(restored);
+        }
+
+        Instantiate(
+            stairPrefab,
+            new Vector3(restored.x * tileSpacing, restored.y * tileSpacing, 0),
+            Quaternion.identity
+        );
+
 
         foreach (var pos in data.chestPositions)
         {
-            Instantiate(floorPrefab, new Vector3(pos.x * tileSpacing, pos.y * tileSpacing, 0), Quaternion.identity);
+            Instantiate(chestPrefab, new Vector3(pos.x * tileSpacing, pos.y * tileSpacing, 0), Quaternion.identity);
         }
+
 
         foreach (var enemyData in data.enemies)
         {
@@ -405,6 +486,42 @@ public class ZoneTwoGenerator : MonoBehaviour, IZoneGenerator
             cam.target = player.transform;
 
     }
+
+    Vector2Int FindNearestValidFloor(Vector2Int origin)
+    {
+        Queue<Vector2Int> frontier = new Queue<Vector2Int>();
+        HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
+
+        frontier.Enqueue(origin);
+        visited.Add(origin);
+
+        Vector2Int[] dirs = {
+        new Vector2Int(1,0), new Vector2Int(-1,0),
+        new Vector2Int(0,1), new Vector2Int(0,-1)
+    };
+
+        while (frontier.Count > 0)
+        {
+            Vector2Int pos = frontier.Dequeue();
+
+            if (IsInsideMap(pos.x, pos.y) && map[pos.x, pos.y] == Zone2TileType.Floor)
+                return pos;
+
+            foreach (var d in dirs)
+            {
+                Vector2Int next = pos + d;
+                if (!visited.Contains(next))
+                {
+                    visited.Add(next);
+                    frontier.Enqueue(next);
+                }
+            }
+        }
+
+        // fallback de emergencia
+        return new Vector2Int(1, 1);
+    }
+
 
     GameObject FindEnemyPrefabByName(string name)
     {
