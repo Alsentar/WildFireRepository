@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //AdjustPlayerFacingDirection();
+        
         Move();
     }
 
@@ -76,7 +76,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleFootsteps()
     {
-        // No sonar pasos si el jugador no tiene control manual (por ejemplo, en combate)
+        // No sonar pasos si el jugador no tiene control manual 
         if (!allowManualControl) return;
 
         if (movement != Vector2.zero)

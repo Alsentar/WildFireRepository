@@ -53,19 +53,6 @@ public class CombatUnit : MonoBehaviour
 
 
 
-    /**
-    public enum DamageType
-    {
-        Physical,
-        Fire,
-        Ice,
-        Lightning,
-        Dark,
-        Holy
-    }
-
-    **/
-
 
 
     public void TakeDamage(int baseDamage, DamageType type)

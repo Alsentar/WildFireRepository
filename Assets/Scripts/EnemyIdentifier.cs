@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class EnemyIdentifier : MonoBehaviour
 {
-    public string enemyID; // único por enemigo
+    public string enemyID; 
 
     void Awake()
     {

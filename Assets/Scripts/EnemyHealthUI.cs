@@ -9,7 +9,7 @@ public class EnemyHealthUI : MonoBehaviour
     public Slider healthSlider;
     public CombatUnit enemyUnit;
     public TextMeshProUGUI nameText;
-    public TextMeshProUGUI levelText; // NUEVO
+    public TextMeshProUGUI levelText; 
 
     void Update()
     {

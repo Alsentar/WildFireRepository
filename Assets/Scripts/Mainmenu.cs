@@ -5,8 +5,7 @@ public class MainMenu : MonoBehaviour
 {
     public void NewGame()
     {
-        // Borrar datos anteriores
-        //BattleLoader.Instance.savedMapData = null;
+        
         SceneManager.LoadScene("WildFireBeta");  
     }
 

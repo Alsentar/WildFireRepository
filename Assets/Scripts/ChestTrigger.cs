@@ -48,7 +48,7 @@ public class ChestTrigger : MonoBehaviour
                 
             }
 
-            //Destroy(gameObject); // opcional
+            
         }
     }
 

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Interfaz para tipo de ataque
 
 public enum DamageType
 {

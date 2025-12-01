@@ -46,7 +46,7 @@ public class EnemyTrigger : MonoBehaviour
         if (id != null)
             BattleLoader.Instance.defeatedEnemyID = id.enemyID;
 
-        // Guardar HP del jugador si quieres
+        // Guardar HP del jugador
         PlayerUnit player = FindObjectOfType<PlayerUnit>();
         if (player != null)
         {

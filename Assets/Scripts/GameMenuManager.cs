@@ -32,13 +32,13 @@ public class GameMenuManager : MonoBehaviour
     public void OpenParty()
     {
         Time.timeScale = 1f;
-        //SceneManager.LoadScene("PartyMenu");
+        
     }
 
     public void OpenInventory()
     {
         Time.timeScale = 1f;
-        //SceneManager.LoadScene("InventoryMenu");
+        
     }
 
     public void OpenSettings()

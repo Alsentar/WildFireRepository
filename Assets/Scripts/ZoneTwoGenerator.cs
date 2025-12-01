@@ -182,7 +182,7 @@ public class ZoneTwoGenerator : MonoBehaviour, IZoneGenerator
     // ===============================
     void PlaceEnemies()
     {
-        // Verifica que existan prefabs de enemigos configurados
+        // Verificar que existan prefabs de enemigos configurados
         if (enemyPrefabs == null || enemyPrefabs.Length == 0)
         {
             Debug.LogWarning("[ZoneTwoGenerator] No se asignaron prefabs de enemigos.");
@@ -257,7 +257,7 @@ public class ZoneTwoGenerator : MonoBehaviour, IZoneGenerator
             col.isTrigger = true;
 
             // -------------------------------
-            //  Asignar EnemyTrigger dinámicamente (igual que en Nivel 1)
+            //  Asignar EnemyTrigger dinamicamente (igual que en Nivel 1)
             // -------------------------------
             EnemyTrigger trigger = enemyInstance.AddComponent<EnemyTrigger>();
             trigger.enemyPrefab = enemyToSpawn; // Prefab original del Project
@@ -397,8 +397,7 @@ public class ZoneTwoGenerator : MonoBehaviour, IZoneGenerator
         //  Normalizar escala para que coincida con el jugador original
         player.transform.localScale = Vector3.one;
 
-        //  Para que se vea mas grande:
-        // player.transform.localScale = new Vector3(1.5f, 1.5f, 1f);
+        
 
         CameraFollow cam = FindObjectOfType<CameraFollow>();
         if (cam != null)

@@ -17,7 +17,7 @@ public class RetryButton : MonoBehaviour
             BattleLoader.Instance.savedMapData = null;
             BattleLoader.Instance.enemyPrefab = null;
 
-            // Restaurar el estado base de cada personaje de la party
+            // Restaurar el estado base de cada futuro personaje de la party
             foreach (CharacterData character in BattleLoader.Instance.party)
             {
                 character.currentHP = character.maxHP;

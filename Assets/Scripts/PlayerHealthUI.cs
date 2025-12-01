@@ -7,7 +7,7 @@ using TMPro;
 public class PlayerHealthUI : MonoBehaviour
 {
     public Slider healthSlider;
-    public TextMeshProUGUI levelText; // NUEVO
+    public TextMeshProUGUI levelText; 
     public CombatUnit playerUnit;
 
     void Update()

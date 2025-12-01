@@ -160,7 +160,7 @@ public class CombatManager : MonoBehaviour
         
 
 
-        StartTurn(); // solo ahora empieza el combate
+        StartTurn(); // entonces, ahora empieza el combate
     }
 
 

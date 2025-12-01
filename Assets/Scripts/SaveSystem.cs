@@ -13,7 +13,7 @@ public static class SaveSystem
         SaveData data = new SaveData();
 
         data.currentFloor = BattleLoader.Instance.currentFloor;
-        data.lastScene = "RestAreaOne"; // podemos cambiar esto si hay más zonas luego
+        data.lastScene = "RestAreaOne"; // podemos cambiar esto para las futuras zonas
         data.kasaiData = BattleLoader.Instance.GetCharacter("Kasai");
 
         string json = JsonUtility.ToJson(data, true);

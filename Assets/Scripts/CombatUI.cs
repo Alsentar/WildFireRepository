@@ -7,7 +7,7 @@ using TMPro;
 public class CombatUI : MonoBehaviour
 {
     public Button attackButton;
-    //public PlayerUnit playerUnit;
+    
 
     public GameObject attackOptionsPanel;
     public GameObject attackButtonPrefab; // Prefab de botón reutilizable
@@ -72,7 +72,7 @@ public class CombatUI : MonoBehaviour
     void SelectAttack(Attack atk)
     {
         attackOptionsPanel.SetActive(false);
-        //playerUnit.canAct = false;
+        
         combatManager.PlayerAttack(atk);
     }
 

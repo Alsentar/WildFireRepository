@@ -9,17 +9,5 @@ public class PlayerUnit : CombatUnit
 
     
 
-    /**
-
-    void Update()
-    {
-        if (canAct && Input.GetKeyDown(KeyCode.Space))
-        {
-            Debug.Log("Jugador ataca con SPACE");
-            canAct = false;
-            //combatManager.PlayerAttack();
-        }
-    }
-
-    **/
+    
 }

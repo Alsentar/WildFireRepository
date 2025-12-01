@@ -49,7 +49,7 @@ public class PauseBackpackPanel : MonoBehaviour
 
     private void RefreshBackpack()
     {
-        // Por ahora, contenido estático.
+        // Se quedara para una futura implementacion
         
     }
 }

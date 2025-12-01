@@ -47,7 +47,7 @@ public class PausePartyPanel : MonoBehaviour
         }
     }
 
-    // Para forzar que se cierre cuando cierres el menú de pausa con ESC
+    // Para forzar que se cierre cuando se cierre el menú de pausa con ESC
     public void ForceClose()
     {
         if (partyPanel != null)

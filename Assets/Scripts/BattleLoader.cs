@@ -47,7 +47,7 @@ public class BattleLoader : MonoBehaviour
             return;
         }
 
-        //  Si no tiene datos (por ejemplo, entramos directo a ZoneTwo)
+        //  Si no tiene datos (por ejemplo, si entramos directo a ZoneTwo para pruebas)
         if (party.Count == 0)
         {
             Debug.Log("[BattleLoader] Inicializando datos por defecto para test directo.");

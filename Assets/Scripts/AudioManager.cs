@@ -36,7 +36,7 @@ public class AudioManager : MonoBehaviour
     {
         if (clip == null || musicSource == null) return;
 
-        // Evita reiniciar la misma música si ya está sonando
+        // Evitar reiniciar la misma música si ya está sonando
         if (musicSource.isPlaying && musicSource.clip == clip) return;
 
         musicSource.clip = clip;
